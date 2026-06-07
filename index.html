@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElevoIA — Sistema Operacional</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!--
+  FONTE CODEC PRO: adicione seus arquivos woff2 e descomente o @font-face abaixo.
+  @font-face {
+    font-family:'Codec PRO';
+    src:url('fonts/CodecPro-Bold.woff2') format('woff2');
+    font-weight:700 900;
+    font-style:normal;
+  }
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;0,8..60,900;1,8..60,400;1,8..60,700&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================
+   TOKENS
+===================================================== */
+:root {
+  --c-bg:        #070c18;
+  --c-surface:   #0c1220;
+  --c-surface2:  #101828;
+  --c-border:    rgba(255,255,255,.07);
+  --c-border2:   rgba(255,255,255,.04);
+  --c-text:      #fff;
+  --c-muted:     rgba(255,255,255,.45);
+  --c-muted2:    rgba(255,255,255,.25);
+  --orange:      #ff5d28;
+  --orange-glow: rgba(255,93,40,.55);
+  --orange-dim:  rgba(255,93,40,.12);
+  --green:       #34d399;
+  --font:        'Codec PRO','Inter',sans-serif;
+  --font-serif:  'Source Serif 4','Georgia',serif;
+}
+
+/* =====================================================
+   RESET
+===================================================== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--c-bg);
+  color:var(--c-text);
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* dot-grid overlay */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:28px 28px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* =====================================================
+   NAV
+===================================================== */
+nav{
+  position:fixed;
+  inset:0 0 auto 0;
+  z-index:999;
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 60px;
+  border-bottom:1px solid var(--c-border);
+  background:rgba(7,12,24,.8);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+}
+
+.nav-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+
+.logo-icon{
+  width:32px;height:32px;
+  background:var(--orange);
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  font-size:17px;
+  color:#fff;
+  box-shadow:0 0 16px var(--orange-glow);
+}
+
+.logo-text{
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:-.4px;
+  color:var(--c-text);
+}
+.logo-text em{color:var(--orange);font-style:normal}
+
+.nav-menu{
+  display:flex;
+  gap:36px;
+  list-style:none;
+}
+.nav-menu a{
+  color:var(--c-muted);
+  font-size:13.5px;
+  font-weight:500;
+  text-decoration:none;
+  transition:color .2s;
+}
+.nav-menu a:hover{color:var(--c-text)}
+
+.btn-cta{
+  background:var(--orange);
+  color:#fff;
+  padding:10px 22px;
+  border-radius:8px;
+  font-size:13.5px;
+  font-weight:700;
+  text-decoration:none;
+  font-family:var(--font);
+  box-shadow:0 0 20px rgba(255,93,40,.4);
+  transition:box-shadow .2s,opacity .2s;
+}
+.btn-cta:hover{box-shadow:0 0 34px rgba(255,93,40,.65)}
+
+/* =====================================================
+   HERO
+===================================================== */
+#hero{
+  position:relative;
+  z-index:1;
+  min-height:100vh;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+  padding:100px 64px 64px;
+  overflow:hidden;
+}
+
+/* ambient glow behind the orb (right side) */
+.hero-ambient{
+  position:absolute;
+  top:50%;right:0;
+  transform:translateY(-50%);
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(255,93,40,.09) 0%,transparent 65%);
+  pointer-events:none;
+}
+
+/* left column: text content */
+.hero-left{
+  flex:0 0 42%;
+  max-width:42%;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+.hero-h1{
+  font-size:clamp(34px,4vw,68px);
+  font-weight:900;
+  font-family:var(--font-serif);
+  line-height:1.05;
+  letter-spacing:-2px;
+  max-width:100%;
+  margin-bottom:22px;
+  text-align:left;
+}
+
+.hero-sub{
+  font-size:16px;
+  line-height:1.75;
+  color:var(--c-muted);
+  max-width:100%;
+  margin-bottom:40px;
+  text-align:left;
+}
+
+.hero-btns{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:0;
+}
+
+.btn-hero{
+  background:var(--orange);
+  color:#fff;
+  padding:15px 34px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:700;
+  text-decoration:none;
+  font-family:var(--font);
+  box-shadow:0 0 28px rgba(255,93,40,.45);
+  transition:box-shadow .2s;
+}
+.btn-hero:hover{box-shadow:0 0 48px rgba(255,93,40,.7)}
+
+.btn-ghost{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:var(--c-muted);
+  font-size:14px;
+  font-weight:500;
+  font-family:var(--font);
+  transition:color .2s;
+}
+.btn-ghost:hover{color:var(--c-text)}
+
+.play-circle{
+  width:36px;height:36px;
+  border-radius:50%;
+  border:1px solid var(--c-border);
+  background:rgba(255,255,255,.04);
+  display:grid;
+  place-items:center;
+  font-size:9px;
+  padding-left:2px;
+}
+
+/* =====================================================
+   VISUAL AREA (right column)
+===================================================== */
+.visual{
+  position:relative;
+  flex:0 0 54%;
+  max-width:54%;
+  height:500px;
+}
+
+/* SVG connector paths */
+.vis-svg{
+  position:absolute;
+  inset:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  overflow:visible;
+}
+
+/* ── ORB ── */
+.orb-wrap{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:260px;height:260px;
+  display:grid;
+  place-items:center;
+}
+
+/* wide ambient glow */
+.orb-glow{
+  position:absolute;
+  inset:-70px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,93,40,.35) 0%,transparent 65%);
+  filter:blur(28px);
+}
+
+/* rings — tilted like an atom / Boltshift orb */
+.orb-ring{
+  position:absolute;
+  border-radius:50%;
+  border:1.5px solid rgba(255,93,40,.55);
+  box-shadow:0 0 14px rgba(255,93,40,.35);
+}
+.orb-ring-1{width:168px;height:168px;transform:rotateX(68deg) rotate(20deg)}
+.orb-ring-2{width:204px;height:204px;transform:rotateX(72deg) rotate(-25deg)}
+.orb-ring-3{width:238px;height:238px;transform:rotateX(66deg) rotate(55deg)}
+
+/* core sphere */
+.orb-core{
+  position:relative;
+  z-index:2;
+  width:106px;height:106px;
+  border-radius:50%;
+  background:radial-gradient(circle at 38% 30%,
+    rgba(255,210,170,.95) 0%,
+    rgba(255,93,40,.9)    35%,
+    rgba(180,40,5,.5)     65%,
+    rgba(80,10,0,.3)      85%,
+    transparent 100%);
+  box-shadow:
+    0 0 40px rgba(255,93,40,.95),
+    0 0 90px rgba(255,93,40,.65),
+    0 0 180px rgba(255,93,40,.35);
+}
+/* internal shimmer */
+.orb-core::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 50%,rgba(255,160,80,.2) 65%,transparent 80%);
+}
+
+/* ── CARD FLOAT ANIMATIONS ── */
+@keyframes float-tl{
+  0%,100%{transform:translate(0px,0px)}
+  30%{transform:translate(-5px,-10px)}
+  65%{transform:translate(3px,-6px)}
+}
+@keyframes float-tr{
+  0%,100%{transform:translate(0px,0px)}
+  35%{transform:translate(5px,-9px)}
+  70%{transform:translate(-3px,-5px)}
+}
+@keyframes float-bl{
+  0%,100%{transform:translate(0px,0px)}
+  40%{transform:translate(-4px,9px)}
+  75%{transform:translate(3px,5px)}
+}
+@keyframes float-br{
+  0%,100%{transform:translate(0px,0px)}
+  25%{transform:translate(5px,8px)}
+  60%{transform:translate(-2px,5px)}
+}
+
+/* ── FLOATING CARDS ── */
+.fcard{
+  position:absolute;
+  background:rgba(12,18,32,.88);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:18px 22px;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+
+.fcard-head{
+  font-size:13px;
+  font-weight:700;
+  color:var(--c-text);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.badge{
+  font-size:10.5px;
+  font-weight:700;
+  padding:3px 9px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+.badge-o{background:rgba(255,93,40,.18);color:var(--orange)}
+.badge-g{background:rgba(52,211,153,.15);color:var(--green)}
+
+.fcard-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 0;
+  border-bottom:1px solid var(--c-border2);
+  font-size:12.5px;
+  color:var(--c-muted);
+}
+.fcard-row:last-child{border-bottom:none}
+
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-o{background:var(--orange)}
+.dot-g{background:var(--green)}
+
+.chip{
+  margin-left:auto;
+  font-size:10.5px;
+  font-weight:700;
+  padding:2px 8px;
+  border-radius:20px;
+  background:rgba(255,93,40,.18);
+  color:var(--orange);
+}
+
+/* mini bar chart */
+.bars{
+  display:flex;
+  align-items:flex-end;
+  gap:5px;
+  height:52px;
+  margin-top:4px;
+}
+.b{
+  flex:1;
+  border-radius:3px 3px 0 0;
+  background:var(--orange);
+  opacity:.4;
+}
+.b.hi{opacity:1}
+.bar-labels{
+  display:flex;
+  gap:5px;
+  margin-top:6px;
+}
+.bl{flex:1;font-size:10px;color:var(--c-muted2);text-align:center}
+
+/* card positions + float animations */
+.ctop-l{top:6%;left:0;width:265px;animation:float-tl 4.2s ease-in-out infinite}
+.ctop-r{top:2%;right:0;width:295px;animation:float-tr 4.8s ease-in-out infinite 0.6s}
+.cbot-l{bottom:4%;left:0;width:268px;animation:float-bl 4.0s ease-in-out infinite 1.1s}
+.cbot-r{bottom:6%;right:0;width:268px;animation:float-br 4.5s ease-in-out infinite 1.8s}
+
+/* =====================================================
+   TEAM / TIMELINE
+===================================================== */
+#team{
+  position:relative;
+  z-index:1;
+  padding:120px 80px 140px;
+  border-top:1px solid var(--c-border);
+}
+
+.sec-label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--orange);
+  text-align:center;
+  margin-bottom:12px;
+}
+
+.sec-title{
+  font-size:clamp(28px,3.8vw,48px);
+  font-weight:900;
+  font-family:var(--font-serif);
+  letter-spacing:-1.2px;
+  text-align:center;
+  margin-bottom:80px;
+}
+
+/* ── AGENT GROUPS — CURVA NEON ── */
+.curve-wrap{
+  position:relative;
+  max-width:900px;
+  aspect-ratio:900/580;
+  margin:0 auto;
+}
+
+.curve-svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+.curve-base{
+  fill:none;
+  stroke:rgba(255,255,255,.1);
+  stroke-width:1.5;
+}
+
+@keyframes neon-travel{
+  0%  {stroke-dashoffset:0}
+  100%{stroke-dashoffset:-2680}
+}
+
+.curve-neon{
+  fill:none;
+  stroke:var(--orange);
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-dasharray:90 9999;
+  animation:neon-travel 6s linear infinite;
+  filter:
+    drop-shadow(0 0 5px var(--orange))
+    drop-shadow(0 0 14px rgba(255,93,40,.65));
+}
+
+.curve-node{
+  fill:rgba(255,255,255,.15);
+  stroke:rgba(255,255,255,.4);
+  stroke-width:1.2;
+  transition:fill .4s ease-out, stroke .4s ease-out, filter .4s ease-out;
+}
+
+/* group label blocks */
+.cg{
+  position:absolute;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.cg-left {left:0;  max-width:160px; align-items:flex-start; text-align:left}
+.cg-right{right:0; max-width:170px; align-items:flex-end;   text-align:right}
+
+.cg-name{
+  font-size:16px;
+  font-weight:800;
+  letter-spacing:-.3px;
+  color:var(--c-text);
+  line-height:1.2;
+}
+.cg-agents{
+  font-size:13px;
+  color:var(--c-muted);
+  line-height:1.75;
+}
+
+/* vertical positions: match SVG node y / 580 */
+.cg-1{top: 9.5%}  /* y=55  */
+.cg-2{top:27.6%}  /* y=160 */
+.cg-3{top:50%}    /* y=290 */
+.cg-4{top:72.4%}  /* y=420 */
+.cg-5{top:90.5%}  /* y=525 */
+
+/* =====================================================
+   PRICING / CTA
+===================================================== */
+#pricing{
+  position:relative;
+  z-index:1;
+  padding:120px 64px 140px;
+  border-top:1px solid var(--c-border);
+}
+
+.pricing-title{
+  font-size:clamp(32px,4.5vw,58px);
+  font-weight:900;
+  font-family:var(--font-serif);
+  letter-spacing:-1.5px;
+  text-align:center;
+  margin-bottom:14px;
+}
+
+.pricing-sub{
+  font-size:16px;
+  color:var(--c-muted);
+  text-align:center;
+  margin-bottom:72px;
+}
+
+.pricing-inner{
+  display:flex;
+  gap:24px;
+  max-width:1060px;
+  margin:0 auto;
+  align-items:stretch;
+}
+
+/* ── PRICE CARD ── */
+.price-card{
+  flex:0 0 370px;
+  background:#0a0e14;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;
+  padding:36px 32px;
+  display:flex;
+  flex-direction:column;
+}
+
+.price-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--orange);
+  margin-bottom:18px;
+}
+
+.price-headline{
+  font-size:26px;
+  font-weight:900;
+  font-family:var(--font-serif);
+  line-height:1.15;
+  letter-spacing:-.5px;
+  margin-bottom:12px;
+}
+
+.price-desc{
+  font-size:14px;
+  color:var(--c-muted);
+  line-height:1.65;
+  margin-bottom:36px;
+  flex:1;
+}
+
+.price-tag-label{
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--c-muted);
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.price-amount{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  gap:3px;
+  margin-bottom:6px;
+}
+
+.price-currency{
+  font-size:22px;
+  font-weight:700;
+  color:var(--c-text);
+  padding-top:16px;
+}
+
+.price-number{
+  font-size:88px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:-4px;
+  color:var(--c-text);
+}
+
+.price-method{
+  font-size:12px;
+  color:var(--c-muted);
+  text-align:center;
+  margin-bottom:32px;
+}
+
+.btn-price{
+  display:block;
+  background:#fff;
+  color:#000;
+  padding:18px;
+  border-radius:10px;
+  font-size:12.5px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  text-decoration:none;
+  text-align:center;
+  font-family:var(--font);
+  transition:background .2s,color .2s,box-shadow .2s;
+  margin-bottom:20px;
+}
+.btn-price:hover{
+  background:var(--orange);
+  color:#fff;
+  box-shadow:0 0 36px rgba(255,93,40,.55);
+}
+
+.price-fine{
+  font-size:11.5px;
+  color:var(--c-muted);
+  text-align:center;
+  line-height:1.65;
+}
+.price-fine strong{color:var(--c-text);font-weight:700}
+
+.bonus-7{
+  margin-top:18px;
+  background:rgba(255,93,40,.08);
+  border:1px solid rgba(255,93,40,.25);
+  border-radius:10px;
+  padding:13px 16px;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  text-align:left;
+}
+.bonus-7-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
+.bonus-7-text{font-size:11px;color:var(--c-muted);line-height:1.6}
+.bonus-7-text strong{color:var(--orange);font-size:12px;display:block;margin-bottom:3px}
+
+/* ── VSCODE CARD ── */
+.vscode-card{
+  flex:1;
+  background:#0d1117;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  font-family:'Courier New',Courier,monospace;
+}
+
+.vs-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 16px;
+  background:#161b22;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  flex-shrink:0;
+}
+
+.vs-dots{display:flex;gap:6px;align-items:center}
+.vs-dot{width:11px;height:11px;border-radius:50%}
+.vs-dot-r{background:#ff5f57}
+.vs-dot-y{background:#ffbd2e}
+.vs-dot-g{background:#28c840}
+
+.vs-path{font-size:12px;color:rgba(255,255,255,.45)}
+.vs-branch{font-size:11px;color:rgba(255,255,255,.28)}
+.vs-branch b{color:var(--orange)}
+
+.vs-body{display:flex;flex:1;min-height:0}
+
+.vs-sidebar{
+  width:42px;
+  background:#161b22;
+  border-right:1px solid rgba(255,255,255,.04);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:14px 0;
+  gap:22px;
+  flex-shrink:0;
+}
+
+.vs-icon{
+  width:20px;height:20px;
+  display:grid;place-items:center;
+  color:rgba(255,255,255,.28);
+  font-size:14px;
+  position:relative;
+}
+.vs-icon.active{color:rgba(255,255,255,.75)}
+
+.vs-badge-icon{
+  position:absolute;top:-4px;right:-5px;
+  width:13px;height:13px;border-radius:50%;
+  background:var(--orange);
+  font-size:7.5px;color:#fff;font-weight:700;
+  display:grid;place-items:center;
+  font-family:var(--font);
+}
+
+.vs-explorer{
+  flex:1;display:flex;flex-direction:column;min-width:0;
+}
+
+.vs-exp-header{
+  padding:7px 14px;
+  font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);
+  border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.vs-exp-acts{display:flex;gap:12px;color:rgba(255,255,255,.25);font-size:12px}
+
+.vs-tree{flex:1;padding:6px 0;overflow:auto}
+
+.vs-row{
+  display:flex;align-items:center;
+  padding:5px 14px;gap:7px;
+  font-size:14px;color:rgba(255,255,255,.6);
+  white-space:nowrap;cursor:default;
+}
+.vs-row:hover{background:rgba(255,255,255,.04)}
+.vs-row.active{background:rgba(255,255,255,.06);color:#fff}
+
+.vs-ind{padding-left:26px}
+
+.vs-arr{font-size:8px;color:rgba(255,255,255,.25);width:10px;flex-shrink:0}
+.i-folder{color:#e8a039;font-size:12px}
+.i-file{color:#6cb6ff;font-size:11px}
+.i-claude{color:var(--orange);font-size:13px;font-weight:700}
+
+.vs-cmt{color:rgba(255,255,255,.25);font-size:12.5px;margin-left:2px;flex-shrink:0}
+.vs-m{
+  margin-left:auto;background:#1a3a2a;color:#3fb077;
+  font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:3px;flex-shrink:0;
+}
+
+.vs-locked{
+  background:rgba(255,93,40,.07);
+  border-left:2px solid var(--orange);
+  position:relative;
+}
+.vs-locked-badge{
+  margin-left:auto;
+  display:flex;align-items:center;gap:3px;
+  background:rgba(255,93,40,.18);
+  border:1px solid rgba(255,93,40,.5);
+  color:var(--orange);
+  font-size:9px;font-weight:700;
+  padding:2px 7px;border-radius:3px;
+  flex-shrink:0;letter-spacing:.4px;
+}
+.vs-skill-desc{
+  font-size:12px;color:rgba(255,255,255,.55);
+  padding:4px 14px 7px 42px;
+  font-style:italic;line-height:1.55;
+  background:rgba(255,93,40,.04);
+  border-left:2px solid var(--orange);
+}
+
+.vs-terminal{
+  background:#090d12;
+  border-top:1px solid rgba(255,255,255,.05);
+  padding:9px 14px;flex-shrink:0;
+}
+.vs-term-row{
+  display:flex;align-items:center;gap:6px;
+  font-size:14px;color:rgba(255,255,255,.55);
+}
+.vs-term-pmt{color:var(--orange)}
+.vs-term-cmd b{color:#fff}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.vs-cursor{
+  display:inline-block;width:7px;height:13px;
+  background:rgba(255,255,255,.75);margin-left:1px;vertical-align:middle;
+  animation:blink .9s step-end infinite;
+}
+
+.vs-status{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:3px 14px;
+  background:#161b22;border-top:1px solid rgba(255,255,255,.04);
+  flex-shrink:0;
+}
+.vs-st-l,.vs-st-r{
+  display:flex;align-items:center;gap:14px;
+  font-size:10.5px;color:rgba(255,255,255,.3);
+}
+.vs-st-l .hi{color:var(--orange)}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+/* ── TABLET ──────────────────────────────────────── */
+@media(max-width:1100px){
+  nav{padding:0 32px}
+  #hero{padding:100px 32px 60px;gap:20px}
+  .hero-left{flex:0 0 44%;max-width:44%}
+  .visual{flex:0 0 52%;max-width:52%;height:460px}
+  .hero-h1{font-size:clamp(30px,4vw,56px)}
+  .ctop-r{width:190px}
+  #team{padding:100px 40px 120px}
+}
+
+/* ── MOBILE ──────────────────────────────────────── */
+@media(max-width:768px){
+
+  /* --- Nav --- */
+  nav{padding:0 20px;height:60px}
+  .nav-menu{display:none}
+  .btn-cta{padding:9px 18px;font-size:13px}
+
+  /* --- Hero layout: stack vertical --- */
+  #hero{
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:84px 20px 52px;
+    gap:36px;
+    min-height:auto;
+  }
+  .hero-ambient{
+    top:10%;left:50%;right:auto;
+    transform:translateX(-50%);
+    width:380px;height:380px;
+  }
+
+  /* --- Text block --- */
+  .hero-left{
+    flex:none;width:100%;max-width:100%;
+    align-items:center;
+  }
+  .hero-h1{
+    font-size:clamp(28px,8.5vw,46px);
+    letter-spacing:-1.5px;
+    text-align:center;
+  }
+  .hero-sub{font-size:15px;text-align:center}
+  .hero-btns{justify-content:center;gap:12px}
+  .btn-hero{padding:13px 28px;font-size:14px}
+
+  /* --- Visual --- */
+  .visual{
+    flex:none;width:100%;max-width:100%;
+    height:300px;
+  }
+
+  /* Cards: usar largura percentual relativa ao .visual */
+  .fcard{padding:9px 11px}
+  .fcard-head{font-size:9.5px;margin-bottom:6px;gap:4px}
+  .fcard-row{font-size:9px;padding:3px 0;gap:5px}
+  .badge{font-size:7.5px;padding:2px 5px}
+  .chip{font-size:7.5px;padding:1px 5px}
+  .bars{height:32px;gap:3px}
+  .bl{font-size:8px}
+  .dot{width:5px;height:5px}
+
+  .ctop-l{top:3%; left:0;  width:43%}
+  .ctop-r{top:0%; right:0; width:46%}
+  .cbot-l{bottom:0%; left:0;  width:43%}
+  .cbot-r{bottom:3%; right:0; width:46%}
+
+  /* --- Pricing --- */
+  #pricing{padding:80px 20px 100px}
+  .pricing-sub{margin-bottom:40px}
+  .pricing-inner{flex-direction:column}
+  .price-card{flex:none;width:100%}
+  .vscode-card{min-height:420px}
+
+  /* --- Team --- */
+  #team{padding:72px 20px 90px}
+  .sec-title{margin-bottom:40px}
+  /* curva → lista vertical no mobile */
+  .curve-wrap{aspect-ratio:unset;height:auto;display:flex;flex-direction:column;gap:0}
+  .curve-svg{display:none}
+  .cg{
+    position:relative;transform:none;top:auto;left:auto;right:auto;
+    max-width:100%;padding:18px 20px;
+    background:rgba(255,255,255,.025);
+    border-bottom:1px solid var(--c-border);
+  }
+  .cg:first-of-type{border-top:1px solid var(--c-border);border-radius:12px 12px 0 0}
+  .cg:last-of-type{border-radius:0 0 12px 12px}
+  .cg-right{align-items:flex-start;text-align:left}
+}
+
+/* ── SMALL MOBILE (< 430px) ──────────────────────── */
+@media(max-width:430px){
+  nav{height:56px}
+  .logo-text{font-size:16px}
+  .logo-icon{width:28px;height:28px;font-size:14px}
+
+  #hero{padding:76px 16px 44px;gap:28px}
+
+  .hero-h1{font-size:clamp(26px,9vw,38px);letter-spacing:-1px}
+  .hero-sub{font-size:14px}
+
+  /* Stack CTAs vertically */
+  .hero-btns{flex-direction:column;width:100%;gap:10px}
+  .btn-hero{width:100%;text-align:center;padding:14px}
+  .btn-ghost{justify-content:center}
+
+  /* Visual: só 2 cards no topo; esconde os de baixo pra não amontoar */
+  .visual{height:240px}
+  .cbot-l,.cbot-r{display:none}
+  .ctop-l{top:22%;left:0;width:45%}
+  .ctop-r{top:16%;right:0;width:45%}
+
+  /* Anéis do orb menores no mobile pequeno */
+  .orb-ring-1{width:120px;height:120px}
+  .orb-ring-2{width:148px;height:148px}
+  .orb-ring-3{width:172px;height:172px}
+  .orb-core{width:76px;height:76px}
+
+  #team{padding:56px 16px 72px}
+  .sec-title{font-size:26px;margin-bottom:32px}
+  .cg{padding:14px 16px}
+  .cg-name{font-size:12.5px}
+  .cg-agents{font-size:10.5px}
+
+  #pricing{padding:56px 16px 72px}
+  .pricing-title{letter-spacing:-1px}
+  .price-number{font-size:72px}
+  .vscode-card{min-height:360px}
+  .vs-cmt{display:none}
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--c-border);
+  padding: 48px 64px;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 40px;
+}
+.footer-brand-desc {
+  font-size: 13px;
+  color: var(--c-muted);
+  margin-top: 12px;
+  line-height: 1.65;
+  max-width: 240px;
+}
+.footer-links { list-style: none; display: flex; gap: 10px; }
+.footer-links a {
+  color: var(--c-muted);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--c-text); }
+.footer-bottom {
+  max-width: 1100px;
+  margin: 32px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--c-border2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-copy { font-size: 12px; color: var(--c-muted2); }
+
+/* =====================================================
+   FAQ
+===================================================== */
+.faq-section {
+  position: relative;
+  z-index: 1;
+  padding: 80px 64px 100px;
+  border-top: 1px solid var(--c-border);
+}
+.faq-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 20px;
+}
+.faq-title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.12;
+  margin-bottom: 64px;
+}
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.faq-item {
+  border-bottom: 1px solid var(--c-border);
+}
+.faq-item:first-child {
+  border-top: 1px solid var(--c-border);
+}
+.faq-item summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-text);
+  cursor: pointer;
+  user-select: none;
+  transition: color .2s;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--orange); }
+.faq-icon {
+  width: 26px; height: 26px;
+  border: 1px solid var(--c-border);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--c-muted);
+  flex-shrink: 0;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.faq-icon::after { content: '+'; }
+.faq-item[open] .faq-icon::after { content: '−'; }
+.faq-item[open] .faq-icon {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+.faq-answer {
+  font-size: 14px;
+  color: var(--c-muted);
+  line-height: 1.75;
+  padding: 0 40px 24px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">✳</div>
+    <span class="logo-text">elevo<em>IA</em></span>
+  </a>
+</nav>
+
+
+<!-- ═══════════════════════════════ HERO ══════════════════════════════ -->
+<section id="hero">
+  <div class="hero-ambient"></div>
+
+  <!-- LEFT: text content -->
+  <div class="hero-left">
+    <h1 class="hero-h1">
+      Seu sistema operacional<br>de IA para agências.
+    </h1>
+
+    <p class="hero-sub">
+      16 skills especializadas em marketing, vendas, atendimento e operações, prontas pra trabalhar pela sua agência com um único investimento.
+    </p>
+
+    <div class="hero-btns">
+      <a href="#" class="btn-hero">Começar Agora</a>
+    </div>
+  </div>
+
+
+  <!-- ── VISUAL ── -->
+  <div class="visual">
+
+    <!-- SVG connection paths — viewBox matches .visual dimensions (100% × 500px) -->
+    <svg class="vis-svg" viewBox="0 0 920 500" xmlns="http://www.w3.org/2000/svg">
+      <!-- center ≈ 460, 250 -->
+      <path d="M460,250 C380,250 290,180 198,76"
+        stroke="rgba(255,93,40,.22)" stroke-width="1.2" stroke-dasharray="5 5" fill="none"/>
+      <path d="M460,250 C540,250 660,180 812,62"
+        stroke="rgba(255,93,40,.22)" stroke-width="1.2" stroke-dasharray="5 5" fill="none"/>
+      <path d="M460,250 C380,250 290,330 200,424"
+        stroke="rgba(255,93,40,.22)" stroke-width="1.2" stroke-dasharray="5 5" fill="none"/>
+      <path d="M460,250 C540,250 660,330 812,430"
+        stroke="rgba(255,93,40,.22)" stroke-width="1.2" stroke-dasharray="5 5" fill="none"/>
+    </svg>
+
+    <!-- ORB -->
+    <div class="orb-wrap">
+      <div class="orb-glow"></div>
+      <div class="orb-ring orb-ring-1"></div>
+      <div class="orb-ring orb-ring-2"></div>
+      <div class="orb-ring orb-ring-3"></div>
+      <div class="orb-core"></div>
+    </div>
+
+    <!-- Card: Marketing & Conteúdo (top-left) -->
+    <div class="fcard ctop-l">
+      <div class="fcard-head">
+        Marketing &amp; Conteúdo
+        <span class="badge badge-o">Ativo</span>
+      </div>
+      <div class="fcard-row"><span class="dot dot-o"></span>Criar post Instagram<span class="chip">Novo</span></div>
+      <div class="fcard-row"><span class="dot dot-o"></span>Copy de anúncio</div>
+      <div class="fcard-row"><span class="dot dot-o"></span>Roteiro de vídeo…</div>
+    </div>
+
+    <!-- Card: Vendas (top-right) -->
+    <div class="fcard ctop-r">
+      <div class="fcard-head">
+        Vendas &amp; Prospecção
+        <span class="badge badge-o">↑ 68% este mês</span>
+      </div>
+      <div class="bars">
+        <div class="b" style="height:28%"></div>
+        <div class="b" style="height:46%"></div>
+        <div class="b" style="height:42%"></div>
+        <div class="b" style="height:72%"></div>
+        <div class="b hi" style="height:100%"></div>
+      </div>
+      <div class="bar-labels">
+        <span class="bl">Mar</span><span class="bl">Abr</span>
+        <span class="bl">Mai</span><span class="bl">Jun</span>
+        <span class="bl">Jul</span>
+      </div>
+    </div>
+
+    <!-- Card: Atendimento (bot-left) -->
+    <div class="fcard cbot-l">
+      <div class="fcard-head">
+        Atendimento ao Cliente
+        <span class="badge badge-g">Online</span>
+      </div>
+      <div class="fcard-row"><span class="dot dot-g"></span>Responder cliente #241</div>
+      <div class="fcard-row"><span class="dot dot-g"></span>Follow-up automático</div>
+      <div class="fcard-row"><span class="dot dot-o"></span>Relatório semanal…</div>
+    </div>
+
+    <!-- Card: Automações (bot-right) -->
+    <div class="fcard cbot-r">
+      <div class="fcard-head">Automações &amp; Processos</div>
+      <div class="fcard-row"><span class="dot dot-o"></span>Integrar CRM ao e-mail</div>
+      <div class="fcard-row"><span class="dot dot-o"></span>Publicar relatório mensal</div>
+      <div class="fcard-row"><span class="dot dot-o"></span>Notificar equipe…</div>
+    </div>
+
+  </div><!-- /visual -->
+</section>
+
+
+<!-- ═══════════════════════════════ AGENTES / GRID ════════════════════ -->
+<section id="team">
+  <p class="sec-label">Agentes ElevoIA</p>
+  <h2 class="sec-title">Um time completo. Cada um no seu papel.</h2>
+
+  <div class="curve-wrap">
+
+    <svg class="curve-svg" viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <!-- faint base line -->
+      <path class="curve-base"
+        d="M 160,55  C 440,55  440,160 720,160
+           C 440,160 440,290 160,290
+           C 440,290 440,420 720,420
+           C 440,420 440,525 160,525"/>
+      <!-- traveling neon light -->
+      <path class="curve-neon"
+        d="M 160,55  C 440,55  440,160 720,160
+           C 440,160 440,290 160,290
+           C 440,290 440,420 720,420
+           C 440,420 440,525 160,525"/>
+      <!-- node dots -->
+      <circle class="curve-node cn-1" cx="160" cy="55"  r="6"/>
+      <circle class="curve-node cn-2" cx="720" cy="160" r="6"/>
+      <circle class="curve-node cn-3" cx="160" cy="290" r="6"/>
+      <circle class="curve-node cn-4" cx="720" cy="420" r="6"/>
+      <circle class="curve-node cn-5" cx="160" cy="525" r="6"/>
+    </svg>
+
+    <!-- Grupo 1 — esquerda -->
+    <div class="cg cg-left cg-1">
+      <span class="cg-name">Prospecção &amp; Vendas</span>
+      <span class="cg-agents">Captador · Entrevistador<br>Estrategista · Vendedor</span>
+    </div>
+
+    <!-- Grupo 2 — direita -->
+    <div class="cg cg-right cg-2">
+      <span class="cg-name">Marketing &amp; Conteúdo</span>
+      <span class="cg-agents">Criador · Designer<br>E-mail Mkt · Gest. Tráfego</span>
+    </div>
+
+    <!-- Grupo 3 — esquerda -->
+    <div class="cg cg-left cg-3">
+      <span class="cg-name">Atendimento</span>
+      <span class="cg-agents">Atendimento<br>Gerente de Contas</span>
+    </div>
+
+    <!-- Grupo 4 — direita -->
+    <div class="cg cg-right cg-4">
+      <span class="cg-name">Operações</span>
+      <span class="cg-agents">Analista · Contador<br>Desenvolvedor · Gest. Proj.</span>
+    </div>
+
+    <!-- Grupo 5 — esquerda -->
+    <div class="cg cg-left cg-5">
+      <span class="cg-name">Coordenação</span>
+      <span class="cg-agents">Maestro · Revisor</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════ PRICING / CTA ════════════════════ -->
+<section id="pricing">
+  <h2 class="pricing-title">Seu time de marketing começa hoje.</h2>
+  <p class="pricing-sub">16 skills especializadas, prontas para trabalhar pela sua agência. Um único investimento, acesso pra sempre.</p>
+
+  <div class="pricing-inner">
+
+    <!-- ── CARD DE PREÇO ── -->
+    <div class="price-card">
+      <p class="price-label">Acesso Imediato</p>
+      <h3 class="price-headline">16 skills especializadas, um único preço</h3>
+      <p class="price-desc">Sistema completo com 16 skills de marketing prontas para usar, mentoria, suporte e todas as atualizações futuras inclusas.</p>
+
+      <p class="price-tag-label">Pagamento Único</p>
+      <div class="price-amount">
+        <span class="price-currency">R$</span>
+        <span class="price-number">57</span>
+      </div>
+      <p class="price-method">à vista no PIX ou cartão</p>
+
+      <a href="#" class="btn-price">Garantir Acesso por R$ 57</a>
+
+      <p class="price-fine">
+        Acesso liberado imediatamente após o pagamento.<br><br>
+        <strong>Você paga 1 só vez e tem acesso pro resto da vida a todas as atualizações futuras.</strong>
+      </p>
+
+      <div class="bonus-7">
+        <div class="bonus-7-icon">🎁</div>
+        <div class="bonus-7-text">
+          <strong>Bônus desbloqueado em 7 dias</strong>
+          Após 1 semana de acesso, você recebe uma aula exclusiva com o <b>Captador</b>, a skill que vai te ajudar a colocar dinheiro no bolso encontrando e abordando clientes ideais do zero.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── VSCODE CARD ── -->
+    <div class="vscode-card">
+
+      <!-- barra de título -->
+      <div class="vs-bar">
+        <div class="vs-dots">
+          <div class="vs-dot vs-dot-r"></div>
+          <div class="vs-dot vs-dot-y"></div>
+          <div class="vs-dot vs-dot-g"></div>
+        </div>
+        <span class="vs-path">~/elevoia</span>
+        <span class="vs-branch"><b>●</b> 16 agentes · main</span>
+      </div>
+
+      <!-- corpo: sidebar + explorer -->
+      <div class="vs-body">
+
+        <!-- sidebar de ícones -->
+        <div class="vs-sidebar">
+          <div class="vs-icon active">&#9776;</div>
+          <div class="vs-icon">&#128269;</div>
+          <div class="vs-icon" style="position:relative">
+            &#9900;
+            <span class="vs-badge-icon">16</span>
+          </div>
+          <div class="vs-icon">&#9654;</div>
+        </div>
+
+        <!-- explorador de arquivos -->
+        <div class="vs-explorer">
+          <div class="vs-exp-header">
+            <span>EXPLORER &nbsp;~/elevoia</span>
+            <div class="vs-exp-acts"><span>+</span><span>↺</span><span>⋯</span></div>
+          </div>
+
+          <div class="vs-tree">
+
+            <!-- _contexto/ -->
+            <div class="vs-row active">
+              <span class="vs-arr">▼</span>
+              <span class="i-folder">📁</span>
+              <span>_contexto/</span>
+              <span class="vs-cmt">identidade e proposta</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>empresa.md</span>
+              <span class="vs-cmt">quem você é e seu ICP</span>
+              <span class="vs-m">M</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>tom-de-voz.md</span>
+              <span class="vs-cmt">linguagem e posicionamento</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>estrategia.md</span>
+              <span class="vs-cmt">metas e prioridades</span>
+            </div>
+
+            <!-- clientes/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>clientes/</span>
+              <span class="vs-cmt">um dossiê por cliente</span>
+            </div>
+
+            <!-- marketing/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>marketing/</span>
+              <span class="vs-cmt">posts, copies e criativos</span>
+            </div>
+
+            <!-- vendas/ -->
+            <div class="vs-row active">
+              <span class="vs-arr">▼</span>
+              <span class="i-folder">📁</span>
+              <span>vendas/</span>
+              <span class="vs-cmt">prospecção e propostas</span>
+            </div>
+            <div class="vs-row vs-ind vs-locked" style="font-size:14px;color:#fff;">
+              <span class="i-file">📄</span>
+              <span style="font-weight:600;">captador.md</span>
+              <span class="vs-cmt" style="font-size:12px;color:rgba(255,255,255,.5);">encontra e aborda clientes ideais</span>
+              <span class="vs-locked-badge">🔒 BLOQUEADO</span>
+            </div>
+            <div class="vs-skill-desc">Identifica leads qualificados, pesquisa o perfil ideal e inicia o primeiro contato para abrir oportunidades.</div>
+
+            <!-- atendimento/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>atendimento/</span>
+              <span class="vs-cmt">suporte e fidelização</span>
+            </div>
+
+            <!-- operacoes/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>operacoes/</span>
+              <span class="vs-cmt">gestão, métricas e finanças</span>
+            </div>
+
+            <!-- .claude/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-claude">✳</span>
+              <span>.claude/</span>
+              <span class="vs-cmt">16 agentes + skills ElevoIA</span>
+            </div>
+
+          </div><!-- /vs-tree -->
+
+          <!-- terminal -->
+          <div class="vs-terminal">
+            <div class="vs-term-row">
+              <span class="vs-term-pmt">›</span>
+              <span style="color:var(--orange);font-weight:700">elevoia</span>
+              <span class="vs-term-cmd"><b>load _contexto/</b></span>
+              <span class="vs-cursor"></span>
+            </div>
+          </div>
+
+        </div><!-- /vs-explorer -->
+      </div><!-- /vs-body -->
+
+      <!-- status bar -->
+      <div class="vs-status">
+        <div class="vs-st-l">
+          <span>⎇ main</span>
+          <span><span class="hi">●</span> 16 agentes</span>
+          <span>● 0 erros</span>
+        </div>
+        <div class="vs-st-r">
+          <span>UTF-8</span>
+          <span>Markdown</span>
+          <span>ElevoIA v1.0</span>
+        </div>
+      </div>
+
+    </div><!-- /vscode-card -->
+
+  </div><!-- /pricing-inner -->
+</section>
+
+
+<script>
+(function(){
+  window.addEventListener('load', function(){
+    var neon = document.querySelector('.curve-neon');
+    if(!neon) return;
+
+    var total = neon.getTotalLength();
+    var dashW = 90; /* stroke-dasharray first value */
+
+    /* acha o comprimento de arco mais próximo de cada nó */
+    function arcOf(cx, cy){
+      var best = 0, minD = Infinity;
+      for(var l = 0; l <= total; l += 0.5){
+        var p = neon.getPointAtLength(l);
+        var d = Math.hypot(p.x - cx, p.y - cy);
+        if(d < minD){ minD = d; best = l; }
+      }
+      return best;
+    }
+
+    var nodes = [
+      { el: document.querySelector('.cn-1'), arc: arcOf(160, 55)  },
+      { el: document.querySelector('.cn-2'), arc: arcOf(720, 160) },
+      { el: document.querySelector('.cn-3'), arc: arcOf(160, 290) },
+      { el: document.querySelector('.cn-4'), arc: arcOf(720, 420) },
+      { el: document.querySelector('.cn-5'), arc: arcOf(160, 525) }
+    ];
+
+    var wasHit = nodes.map(function(){ return false; });
+
+    function tick(){
+      /* lê o dashoffset REAL da animação CSS a cada frame */
+      var offset = parseFloat(window.getComputedStyle(neon).strokeDashoffset) || 0;
+      var tail   = Math.max(0, -offset);   /* posição da cauda no path  */
+      var head   = tail + dashW;           /* posição da cabeça no path */
+
+      nodes.forEach(function(n, i){
+        if(!n.el) return;
+        var hit = n.arc >= tail && n.arc <= head;
+
+        if(hit && !wasHit[i]){
+          /* toca o nó — vira laranja na hora */
+          n.el.style.transition = 'fill 0s, stroke 0s, filter 0s';
+          n.el.style.fill   = '#ff5d28';
+          n.el.style.stroke = '#ff5d28';
+          n.el.style.filter = 'drop-shadow(0 0 8px #ff5d28) drop-shadow(0 0 20px rgba(255,93,40,.8))';
+          n.el.setAttribute('r','9');
+        } else if(!hit && wasHit[i]){
+          /* neon saiu — apaga com fade suave */
+          n.el.style.transition = 'fill .45s ease-out, stroke .45s ease-out, filter .45s ease-out';
+          n.el.style.fill   = 'rgba(255,255,255,0.15)';
+          n.el.style.stroke = 'rgba(255,255,255,0.4)';
+          n.el.style.filter = '';
+          n.el.setAttribute('r','6');
+        }
+        wasHit[i] = hit;
+      });
+
+      requestAnimationFrame(tick);
+    }
+
+    tick();
+  });
+})();
+</script>
+
+<!-- ═══════════════════════════════ FAQ ══════════════════════════════ -->
+<section class="faq-section">
+  <p class="faq-label">Dúvidas frequentes</p>
+  <h2 class="faq-title">Tem alguma dúvida?</h2>
+
+  <div class="faq-list">
+
+    <details class="faq-item">
+      <summary>
+        O que é o ElevoIA exatamente?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Um sistema com 16 skills de IA especializadas em marketing, cada uma com um papel definido: Captador, Estrategista, Criador, Analista e mais. Você usa pelo Claude, a IA da Anthropic, direto no seu computador. Não é um SaaS com mensalidade: é um sistema que você instala uma vez e usa para sempre, com seus próprios clientes.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Preciso saber programar para usar?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Não. O ElevoIA funciona em linguagem natural: você conversa com as skills exatamente como conversaria com um colega de equipe. Sem código, sem configuração complicada. Se você sabe mandar uma mensagem, você consegue usar.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Como funciona o pagamento e quando recebo o acesso?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Pagamento único de R$57 via PIX ou cartão de crédito. Assim que o pagamento é confirmado, o acesso é liberado imediatamente, sem aprovação manual, sem esperar. E é pra sempre: todas as atualizações futuras estão incluídas no único pagamento.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Funciona para qualquer tipo de agência?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Sim. O sistema foi pensado para agências de marketing digital, mas funciona para qualquer agência que queira usar IA para entregar mais resultado para seus clientes: social media, tráfego pago, branding, criação de conteúdo ou marketing completo.</p>
+    </details>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ FOOTER ════════════════════════════ -->
+<footer>
+  <div class="footer-inner" style="grid-template-columns:1fr auto;align-items:center;">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="text-decoration:none">
+        <div class="logo-icon">✳</div>
+        <span class="logo-text">elevo<em>IA</em></span>
+      </a>
+      <p class="footer-brand-desc">Um time de skills de IA que presta serviço de marketing para o seu negócio.</p>
+    </div>
+
+    <ul class="footer-links" style="gap:32px;">
+      <li><a href="https://www.instagram.com/rochhax/" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="https://www.youtube.com/@rochhax" target="_blank" rel="noopener">YouTube</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 ElevoIA. Todos os direitos reservados.</span>
+    <span class="footer-copy">Privacidade · Termos</span>
+  </div>
+</footer>
+
+</body>
+</html>

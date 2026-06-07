@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElevoIA — Skills de IA</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;0,8..60,900;1,8..60,400;1,8..60,700&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================
+   TOKENS
+===================================================== */
+:root {
+  --c-bg:        #070c18;
+  --c-surface:   #0c1220;
+  --c-surface2:  #101828;
+  --c-border:    rgba(255,255,255,.07);
+  --c-border2:   rgba(255,255,255,.04);
+  --c-text:      #fff;
+  --c-muted:     rgba(255,255,255,.45);
+  --c-muted2:    rgba(255,255,255,.25);
+  --orange:      #ff5d28;
+  --orange-glow: rgba(255,93,40,.55);
+  --orange-dim:  rgba(255,93,40,.12);
+  --green:       #34d399;
+  --font:        'Inter', sans-serif;
+  --font-serif:  'Source Serif 4','Georgia',serif;
+}
+
+/* =====================================================
+   RESET
+===================================================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* dot-grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =====================================================
+   NAV
+===================================================== */
+nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 999;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  border-bottom: 1px solid var(--c-border);
+  background: rgba(7,12,24,.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+}
+.logo-icon {
+  width: 30px; height: 30px;
+  background: var(--orange);
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  color: #fff;
+  box-shadow: 0 0 14px var(--orange-glow);
+}
+.logo-text { font-size: 17px; font-weight: 900; letter-spacing: -.4px; color: var(--c-text); }
+.logo-text em { color: var(--orange); font-style: normal; }
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--c-muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--c-text); }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.nav-login {
+  color: var(--c-muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-login:hover { color: var(--c-text); }
+.nav-signup {
+  background: var(--c-text);
+  color: #000;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-signup:hover { opacity: .85; }
+
+/* =====================================================
+   HERO
+===================================================== */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 160px 48px 40px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin-bottom: 28px;
+}
+
+.hero-h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.5px;
+  color: var(--c-text);
+  margin-bottom: 24px;
+}
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--c-muted);
+  line-height: 1.7;
+  max-width: 540px;
+  margin: 0 auto 40px;
+}
+
+.btn-hero-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,.18);
+  color: var(--c-text);
+  padding: 11px 24px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color .2s, background .2s;
+}
+.btn-hero-outline:hover { border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.05); }
+.btn-hero-outline svg { opacity: .6; }
+
+/* =====================================================
+   HERO MOCKUP — "Atribuir para..."
+===================================================== */
+.hero-mockup-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 20px auto 0;
+  padding: 0 24px;
+}
+
+.assign-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+}
+
+.assign-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-muted);
+  font-size: 13px;
+}
+.assign-input-icon { opacity: .4; font-size: 14px; }
+
+.assign-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--c-border2);
+  transition: background .15s;
+  cursor: default;
+}
+.assign-row:last-child { border-bottom: none; }
+.assign-row:hover { background: rgba(255,255,255,.03); }
+.assign-row.selected { background: rgba(255,93,40,.06); }
+
+.skill-avatar {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.av-orange  { background: rgba(255,93,40,.2);  color: var(--orange); }
+.av-blue    { background: rgba(88,130,255,.2); color: #587fff; }
+.av-purple  { background: rgba(160,80,255,.2); color: #a050ff; }
+.av-green   { background: rgba(52,211,153,.2); color: var(--green); }
+.av-pink    { background: rgba(255,80,160,.2); color: #ff50a0; }
+
+.assign-badge {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255,93,40,.15);
+  color: var(--orange);
+  letter-spacing: .3px;
+}
+.assign-badge.new { background: rgba(52,211,153,.15); color: var(--green); }
+
+.assign-check {
+  margin-left: auto;
+  color: var(--orange);
+  font-size: 14px;
+}
+
+/* =====================================================
+   FEATURE SECTIONS
+===================================================== */
+.features { position: relative; z-index: 1; padding: 120px 48px 40px; }
+
+.feature-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto 120px;
+}
+.feature-block:last-child { margin-bottom: 0; }
+.feature-block.reverse { direction: rtl; }
+.feature-block.reverse > * { direction: ltr; }
+
+.feature-text {}
+.feature-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+.feature-h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--c-text);
+  margin-bottom: 16px;
+}
+.feature-p {
+  font-size: 15px;
+  color: var(--c-muted);
+  line-height: 1.75;
+}
+
+.feature-ui {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
+}
+
+/* Mockup: chat thread */
+.chat-thread { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.chat-bubble {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  max-width: 85%;
+}
+.chat-bubble.user { background: rgba(255,255,255,.07); align-self: flex-end; color: rgba(255,255,255,.8); }
+.chat-bubble.skill { background: rgba(255,93,40,.1); border: 1px solid rgba(255,93,40,.2); align-self: flex-start; color: rgba(255,255,255,.85); }
+.chat-from { font-size: 10px; font-weight: 700; color: var(--orange); margin-bottom: 4px; letter-spacing: .5px; }
+
+/* Mockup: activity log */
+.activity-log { padding: 0; }
+.act-header { padding: 12px 16px; border-bottom: 1px solid var(--c-border); display: flex; align-items: center; gap: 8px; }
+.act-header-dot { width: 8px; height: 8px; border-radius: 50%; }
+.act-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--c-border2);
+  font-size: 12.5px;
+  color: var(--c-muted);
+}
+.act-item:last-child { border-bottom: none; }
+.act-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.pill-orange { background: rgba(255,93,40,.15); color: var(--orange); }
+.pill-blue   { background: rgba(88,130,255,.15); color: #587fff; }
+.pill-green  { background: rgba(52,211,153,.15); color: var(--green); }
+.pill-purple { background: rgba(160,80,255,.15); color: #a050ff; }
+.act-label { color: rgba(255,255,255,.7); font-weight: 500; }
+
+/* Mockup: task board */
+.task-board { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--c-border2);
+  font-size: 12.5px;
+}
+.task-id { color: var(--c-muted2); font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.task-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.td-o { background: var(--orange); }
+.td-g { background: var(--green); }
+.td-b { background: #587fff; }
+.td-p { background: #a050ff; }
+.task-name { color: rgba(255,255,255,.75); flex: 1; }
+.task-assignee {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255,255,255,.07);
+  color: var(--c-muted);
+}
+
+/* =====================================================
+   SKILLS GRID
+===================================================== */
+.skills-section {
+  position: relative;
+  z-index: 1;
+  padding: 40px 48px 60px;
+  text-align: center;
+}
+
+.skills-section-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin-bottom: 20px;
+}
+
+.skills-section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  line-height: 1.1;
+  max-width: 600px;
+  margin: 0 auto 16px;
+}
+
+.skills-section-sub {
+  font-size: 15px;
+  color: var(--c-muted);
+  max-width: 500px;
+  margin: 0 auto 60px;
+  line-height: 1.7;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--c-border);
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 1100px;
+  margin: 0 auto 40px;
+}
+
+.skill-card {
+  background: var(--c-surface);
+  padding: 28px 26px 26px;
+  text-align: left;
+  position: relative;
+  transition: background .2s;
+  cursor: default;
+}
+.skill-card:hover { background: var(--c-surface2); }
+
+.skill-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.skill-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-text);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.skill-card-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(52,211,153,.15);
+  color: var(--green);
+  letter-spacing: .3px;
+}
+.skill-card-tag.coming { background: rgba(255,255,255,.08); color: var(--c-muted); }
+
+.skill-card-desc {
+  font-size: 13px;
+  color: var(--c-muted);
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+.skill-card-arrow { display: none; }
+
+/* =====================================================
+   MARQUEE
+===================================================== */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-wrap {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 48px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 28px;
+  margin: 0 6px;
+  border: 1px solid var(--c-border);
+  border-radius: 100px;
+  background: var(--c-surface);
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,.75);
+  white-space: nowrap;
+  cursor: default;
+  transition: background .2s, color .2s;
+}
+.marquee-item:hover { background: var(--c-surface2); color: #fff; }
+
+.mq-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skills-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: none;
+  color: var(--c-text);
+  padding: 11px 28px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: border-color .2s, background .2s;
+}
+.skills-explore-btn:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.04); }
+
+/* =====================================================
+   PRICING / CTA
+===================================================== */
+.pricing-section {
+  position: relative;
+  z-index: 1;
+  padding: 80px 64px 120px;
+  border-top: 1px solid var(--c-border);
+}
+
+.pricing-title {
+  font-size: clamp(32px, 4.5vw, 58px);
+  font-weight: 900;
+  font-family: var(--font-serif);
+  letter-spacing: -1.5px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.pricing-sub {
+  font-size: 16px;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+.pricing-inner {
+  display: flex;
+  gap: 24px;
+  max-width: 1060px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+.price-card {
+  flex: 0 0 370px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 20px;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.price-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 18px;
+}
+
+.price-headline {
+  font-size: 26px;
+  font-weight: 900;
+  font-family: var(--font-serif);
+  line-height: 1.15;
+  letter-spacing: -.5px;
+  margin-bottom: 12px;
+}
+
+.price-desc {
+  font-size: 14px;
+  color: var(--c-muted);
+  line-height: 1.65;
+  margin-bottom: 36px;
+  flex: 1;
+}
+
+.price-tag-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.price-amount {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.price-currency {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--c-text);
+  padding-top: 16px;
+}
+
+.price-number {
+  font-size: 88px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -4px;
+  color: var(--c-text);
+}
+
+.price-method {
+  font-size: 12px;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.btn-price {
+  display: block;
+  background: #fff;
+  color: #000;
+  padding: 18px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  font-family: var(--font);
+  transition: background .2s, color .2s, box-shadow .2s;
+  margin-bottom: 20px;
+}
+.btn-price:hover {
+  background: var(--orange);
+  color: #fff;
+  box-shadow: 0 0 36px rgba(255,93,40,.55);
+}
+
+.price-fine {
+  font-size: 11.5px;
+  color: var(--c-muted);
+  text-align: center;
+  line-height: 1.65;
+}
+.price-fine strong { color: var(--c-text); font-weight: 700; }
+
+.bonus-7 {
+  margin-top: 18px;
+  background: rgba(255,93,40,.08);
+  border: 1px solid rgba(255,93,40,.25);
+  border-radius: 10px;
+  padding: 13px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+}
+.bonus-7-icon { font-size: 20px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+.bonus-7-text { font-size: 11px; color: var(--c-muted); line-height: 1.6; }
+.bonus-7-text strong { color: var(--orange); font-size: 12px; display: block; margin-bottom: 3px; }
+
+/* ── VSCODE CARD (always dark — IDE aesthetic) ── */
+.vscode-card {
+  flex: 1;
+  background: #0d1117;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.vs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #161b22;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  flex-shrink: 0;
+}
+
+.vs-dots { display: flex; gap: 6px; align-items: center; }
+.vs-dot { width: 11px; height: 11px; border-radius: 50%; }
+.vs-dot-r { background: #ff5f57; }
+.vs-dot-y { background: #ffbd2e; }
+.vs-dot-g { background: #28c840; }
+
+.vs-path { font-size: 12px; color: rgba(255,255,255,.45); }
+.vs-branch { font-size: 11px; color: rgba(255,255,255,.28); }
+.vs-branch b { color: var(--orange); }
+
+.vs-body { display: flex; flex: 1; min-height: 0; }
+
+.vs-sidebar {
+  width: 42px;
+  background: #161b22;
+  border-right: 1px solid rgba(255,255,255,.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 0;
+  gap: 22px;
+  flex-shrink: 0;
+}
+
+.vs-icon {
+  width: 20px; height: 20px;
+  display: grid; place-items: center;
+  color: rgba(255,255,255,.28);
+  font-size: 14px;
+  position: relative;
+}
+.vs-icon.active { color: rgba(255,255,255,.75); }
+
+.vs-badge-icon {
+  position: absolute; top: -4px; right: -5px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--orange);
+  font-size: 7.5px; color: #fff; font-weight: 700;
+  display: grid; place-items: center;
+  font-family: var(--font);
+}
+
+.vs-explorer { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+.vs-exp-header {
+  padding: 7px 14px;
+  font-size: 9.5px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.vs-exp-acts { display: flex; gap: 12px; color: rgba(255,255,255,.25); font-size: 12px; }
+
+.vs-tree { flex: 1; padding: 6px 0; overflow: auto; }
+
+.vs-row {
+  display: flex; align-items: center;
+  padding: 5px 14px; gap: 7px;
+  font-size: 14px; color: rgba(255,255,255,.6);
+  white-space: nowrap; cursor: default;
+}
+.vs-row:hover { background: rgba(255,255,255,.04); }
+.vs-row.active { background: rgba(255,255,255,.06); color: #fff; }
+
+.vs-ind { padding-left: 26px; }
+
+.vs-arr { font-size: 8px; color: rgba(255,255,255,.25); width: 10px; flex-shrink: 0; }
+.i-folder { color: #e8a039; font-size: 12px; }
+.i-file   { color: #6cb6ff; font-size: 11px; }
+.i-claude { color: var(--orange); font-size: 13px; font-weight: 700; }
+
+.vs-cmt { color: rgba(255,255,255,.25); font-size: 12.5px; margin-left: 2px; flex-shrink: 0; }
+.vs-m {
+  margin-left: auto; background: #1a3a2a; color: #3fb077;
+  font-size: 8.5px; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0;
+}
+
+.vs-locked {
+  background: rgba(255,93,40,.07);
+  border-left: 2px solid var(--orange);
+}
+.vs-locked-badge {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 3px;
+  background: rgba(255,93,40,.18);
+  border: 1px solid rgba(255,93,40,.5);
+  color: var(--orange);
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 3px;
+  flex-shrink: 0; letter-spacing: .4px;
+}
+.vs-skill-desc {
+  font-size: 12px; color: rgba(255,255,255,.55);
+  padding: 4px 14px 7px 42px;
+  font-style: italic; line-height: 1.55;
+  background: rgba(255,93,40,.04);
+  border-left: 2px solid var(--orange);
+}
+
+.vs-terminal {
+  background: #090d12;
+  border-top: 1px solid rgba(255,255,255,.05);
+  padding: 9px 14px; flex-shrink: 0;
+}
+.vs-term-row {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 14px; color: rgba(255,255,255,.55);
+}
+.vs-term-pmt { color: var(--orange); }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.vs-cursor {
+  display: inline-block; width: 7px; height: 13px;
+  background: rgba(255,255,255,.75); margin-left: 1px; vertical-align: middle;
+  animation: blink .9s step-end infinite;
+}
+
+.vs-status {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 3px 14px;
+  background: #161b22; border-top: 1px solid rgba(255,255,255,.04);
+  flex-shrink: 0;
+}
+.vs-st-l, .vs-st-r {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 10.5px; color: rgba(255,255,255,.3);
+}
+.vs-st-l .hi { color: var(--orange); }
+
+/* =====================================================
+   CREATE OWN SECTION
+===================================================== */
+.create-section {
+  position: relative;
+  z-index: 1;
+  padding: 40px 48px 140px;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* floating dots */
+.create-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.create-dots span {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+}
+
+.create-content { position: relative; z-index: 2; }
+
+.create-h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.create-sub {
+  font-size: 15px;
+  color: var(--c-muted);
+  max-width: 420px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+
+.btn-cta-filled {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--c-text);
+  color: #000;
+  padding: 12px 28px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.btn-cta-filled:hover { opacity: .88; }
+
+
+/* =====================================================
+   SKILL DEMO ANIMATION
+===================================================== */
+.skill-demo {
+  max-width: 580px;
+  margin: 56px auto 0;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,.5);
+  text-align: left;
+  position: relative;
+  z-index: 2;
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 16px;
+  background: var(--c-surface2);
+  border-bottom: 1px solid var(--c-border);
+}
+.demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+.demo-dot-r { background: #ff5f57; }
+.demo-dot-y { background: #ffbd2e; }
+.demo-dot-g { background: #28c840; }
+.demo-title { font-size: 12px; color: var(--c-muted); margin-left: 4px; }
+
+.demo-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 260px;
+}
+
+.demo-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+.demo-msg.visible { opacity: 1; transform: translateY(0); }
+
+.demo-msg-from {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--c-muted);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.demo-msg-agent .demo-msg-from { color: var(--orange); }
+
+.demo-bubble {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.demo-bubble-user {
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.85);
+  max-width: 88%;
+  align-self: flex-end;
+  margin-left: auto;
+}
+.demo-bubble-agent {
+  background: rgba(255,93,40,.08);
+  border: 1px solid rgba(255,93,40,.18);
+  color: rgba(255,255,255,.8);
+}
+
+/* thinking dots */
+.demo-thinking {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 3px 0;
+}
+@keyframes think-bounce {
+  0%,80%,100% { transform: translateY(0); opacity: .35; }
+  40%          { transform: translateY(-6px); opacity: 1; }
+}
+.demo-think-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: think-bounce 1.3s ease-in-out infinite;
+}
+.demo-think-dot:nth-child(2) { animation-delay: .18s; }
+.demo-think-dot:nth-child(3) { animation-delay: .36s; }
+
+/* generation steps */
+.demo-steps { display: flex; flex-direction: column; gap: 7px; }
+
+.demo-step {
+  font-size: 12.5px;
+  color: var(--c-muted);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .35s ease, transform .35s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.demo-step .step-spinner {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.18);
+  flex-shrink: 0;
+  position: relative;
+  transition: background .3s, border-color .3s;
+}
+.demo-step.visible { opacity: 1; transform: translateX(0); }
+.demo-step.done .step-spinner {
+  background: var(--green);
+  border-color: var(--green);
+}
+.demo-step.done .step-spinner::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: #fff;
+  font-weight: 800;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.demo-step.visible:not(.done) .step-spinner::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  border-top-color: var(--orange);
+  animation: spin .7s linear infinite;
+}
+
+.demo-step-success {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .4s ease, transform .4s ease;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.demo-step-success.visible { opacity: 1; transform: translateX(0); }
+
+/* new skill card result */
+.demo-new-skill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--c-surface2);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+.demo-new-skill.visible { opacity: 1; transform: translateY(0); }
+
+.demo-skill-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: rgba(88,130,255,.18);
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+.demo-skill-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--c-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.demo-skill-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(52,211,153,.15);
+  color: var(--green);
+  letter-spacing: .5px;
+}
+.demo-skill-desc {
+  font-size: 12px;
+  color: var(--c-muted);
+  line-height: 1.5;
+}
+
+/* input bar at bottom */
+.demo-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-top: 1px solid var(--c-border);
+  background: var(--c-surface2);
+}
+.demo-input-fake {
+  flex: 1;
+  font-size: 13px;
+  color: var(--c-muted2);
+  font-style: italic;
+}
+.demo-input-btn {
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: default;
+  font-family: var(--font);
+  box-shadow: 0 0 18px rgba(255,93,40,.4);
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--c-border);
+  padding: 60px 48px 48px;
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr 1fr;
+  gap: 40px;
+}
+
+.footer-brand {}
+.footer-brand .logo-text { font-size: 16px; }
+.footer-brand-desc {
+  font-size: 13px;
+  color: var(--c-muted);
+  margin-top: 12px;
+  line-height: 1.65;
+  max-width: 220px;
+}
+
+.footer-col-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--c-muted2);
+  margin-bottom: 16px;
+}
+
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  color: var(--c-muted);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--c-text); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 48px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--c-border2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-copy { font-size: 12px; color: var(--c-muted2); }
+
+/* =====================================================
+   THEME TOGGLE BUTTON
+===================================================== */
+.theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-size: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background .2s, border-color .2s;
+  flex-shrink: 0;
+}
+.theme-btn:hover { background: var(--c-surface2); }
+
+/* =====================================================
+   LIGHT MODE OVERRIDES
+===================================================== */
+[data-theme="light"] {
+  --c-bg:       #f5f7ff;
+  --c-surface:  #ffffff;
+  --c-surface2: #eef1f8;
+  --c-border:   rgba(0,0,0,.08);
+  --c-border2:  rgba(0,0,0,.05);
+  --c-text:     #0f172a;
+  --c-muted:    rgba(15,23,42,.5);
+  --c-muted2:   rgba(15,23,42,.3);
+  --green:      #16a34a;
+}
+[data-theme="light"] nav {
+  background: rgba(245,247,255,.92);
+}
+body[data-theme="light"]::before {
+  background-image: radial-gradient(rgba(0,0,0,.18) 1px, transparent 1px);
+}
+[data-theme="light"] .assign-card {
+  box-shadow: 0 20px 60px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.04);
+}
+[data-theme="light"] .assign-row:hover { background: rgba(0,0,0,.025); }
+[data-theme="light"] .chat-bubble.user {
+  background: rgba(0,0,0,.05);
+  color: rgba(15,23,42,.8);
+}
+[data-theme="light"] .chat-bubble.skill { color: rgba(15,23,42,.85); }
+[data-theme="light"] .act-label         { color: rgba(15,23,42,.65); }
+[data-theme="light"] .act-text          { color: rgba(15,23,42,.55) !important; }
+[data-theme="light"] .task-row          { background: rgba(0,0,0,.03); }
+[data-theme="light"] .task-name         { color: rgba(15,23,42,.75); }
+[data-theme="light"] .task-assignee     { background: rgba(0,0,0,.06); }
+[data-theme="light"] .skill-card-tag.coming { background: rgba(0,0,0,.07); }
+[data-theme="light"] .marquee-item {
+  color: rgba(15,23,42,.65);
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+[data-theme="light"] .marquee-item:hover { color: var(--c-text); }
+[data-theme="light"] .skills-explore-btn { border-color: rgba(0,0,0,.15); }
+[data-theme="light"] .skills-explore-btn:hover {
+  border-color: rgba(0,0,0,.28);
+  background: rgba(0,0,0,.04);
+}
+[data-theme="light"] .create-dots span { background: rgba(0,0,0,.15); }
+[data-theme="light"] .btn-cta-filled   { color: #fff; }
+[data-theme="light"] .nav-signup       { color: #fff; }
+[data-theme="light"] .feature-ui { box-shadow: 0 12px 40px rgba(0,0,0,.08); }
+[data-theme="light"] footer { background: var(--c-surface); border-top-color: var(--c-border); }
+[data-theme="light"] .demo-bubble-user { background: rgba(0,0,0,.05); color: rgba(15,23,42,.8); }
+[data-theme="light"] .demo-bubble-agent { background: rgba(255,93,40,.05); border-color: rgba(255,93,40,.15); color: rgba(15,23,42,.8); }
+[data-theme="light"] .skill-demo { box-shadow: 0 20px 60px rgba(0,0,0,.1); }
+[data-theme="light"] .price-card { border-color: rgba(0,0,0,.1); }
+[data-theme="light"] .btn-price { background: #0f172a; color: #fff; }
+[data-theme="light"] .btn-price:hover { background: var(--orange); color: #fff; }
+
+/* =====================================================
+   FAQ
+===================================================== */
+.faq-section {
+  position: relative;
+  z-index: 1;
+  padding: 80px 64px 100px;
+  border-top: 1px solid var(--c-border);
+}
+.faq-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  text-align: center;
+  margin-bottom: 20px;
+}
+.faq-title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.12;
+  margin-bottom: 64px;
+}
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.faq-item {
+  border-bottom: 1px solid var(--c-border);
+}
+.faq-item:first-child {
+  border-top: 1px solid var(--c-border);
+}
+.faq-item summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-text);
+  cursor: pointer;
+  user-select: none;
+  transition: color .2s;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--orange); }
+.faq-icon {
+  width: 26px; height: 26px;
+  border: 1px solid var(--c-border);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--c-muted);
+  flex-shrink: 0;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.faq-icon::after { content: '+'; }
+.faq-item[open] .faq-icon::after { content: '−'; }
+.faq-item[open] .faq-icon {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+.faq-answer {
+  font-size: 14px;
+  color: var(--c-muted);
+  line-height: 1.75;
+  padding: 0 40px 24px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">✳</div>
+    <span class="logo-text">elevo<em>IA</em></span>
+  </a>
+
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="font-size:12px;font-weight:500;color:var(--c-muted);">Mudar tema</span>
+    <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Mudar tema">☀️</button>
+    <a href="#" class="nav-signup">Começar agora</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <span class="hero-label">ElevoIA · Skills de IA</span>
+  <h1 class="hero-h1">Colegas artificiais.<br>Colaboração natural.</h1>
+  <p class="hero-sub">16 skills especializadas em marketing, prontas pra trabalhar no seu time. Do primeiro contato com o lead até a entrega final: delegue, acompanhe e escale sem contratar ninguém.</p>
+</section>
+
+<!-- ===================== HERO MOCKUP ===================== -->
+<div class="hero-mockup-wrap">
+  <div class="assign-card">
+    <div class="assign-input">
+      <span class="assign-input-icon">🔍</span>
+      Atribuir para...
+    </div>
+    <div class="assign-row selected">
+      <div class="skill-avatar av-orange">🎯</div>
+      <span>Captador</span>
+      <span class="assign-check">✓</span>
+    </div>
+    <div class="assign-row">
+      <div class="skill-avatar av-blue">📊</div>
+      <span>Analista</span>
+      <span class="assign-badge new">Ativo</span>
+    </div>
+    <div class="assign-row">
+      <div class="skill-avatar av-purple">✍️</div>
+      <span>Criador</span>
+      <span class="assign-badge new">Ativo</span>
+    </div>
+    <div class="assign-row">
+      <div class="skill-avatar av-green">🎨</div>
+      <span>Designer</span>
+      <span class="assign-badge new">Ativo</span>
+    </div>
+    <div class="assign-row">
+      <div class="skill-avatar av-pink">📧</div>
+      <span>E-mail Marketing</span>
+      <span class="assign-badge new">Ativo</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FEATURES ===================== -->
+<section class="features">
+
+  <!-- Feature 1 -->
+  <div class="feature-block">
+    <div class="feature-text">
+      <span class="feature-tag">Produtividade</span>
+      <h2 class="feature-h2">Rápida, focada e especializada. Como qualquer membro sênior do time.</h2>
+      <p class="feature-p">Cada skill é uma especialista dedicada ao marketing da sua agência. Atribua tarefas, acompanhe cada entrega e colabore diretamente, tudo dentro de um fluxo que já funciona como um time de verdade.</p>
+    </div>
+    <div class="feature-ui">
+      <div class="chat-thread">
+        <div class="chat-bubble user">Pode criar um post para o Instagram sobre o lançamento do produto?</div>
+        <div class="chat-bubble skill">
+          <div class="chat-from">CRIADOR</div>
+          Claro! Vou gerar 3 variações com ângulos diferentes: emocional, racional e urgência. Qual tom combina mais com a campanha atual?
+        </div>
+        <div class="chat-bubble user">Usa urgência, temos só 3 dias de promoção</div>
+        <div class="chat-bubble skill">
+          <div class="chat-from">CRIADOR</div>
+          Perfeito. Preparando os 3 posts com countdown e CTA de escassez. Pronto em instantes.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 2 -->
+  <div class="feature-block reverse">
+    <div class="feature-text">
+      <span class="feature-tag">Transparência</span>
+      <h2 class="feature-h2">Acompanhe cada passo em tempo real.</h2>
+      <p class="feature-p">As skills trabalham por você, mas nunca às escuras. Veja cada ação executada, da pesquisa ao entregável, com log de atividades em tempo real sincronizado com as tarefas e o dossiê do cliente.</p>
+    </div>
+    <div class="feature-ui">
+      <div class="activity-log">
+        <div class="act-header">
+          <div class="act-header-dot" style="background:var(--orange)"></div>
+          <span style="font-size:12px;color:var(--c-muted);font-weight:600;">Atividade recente</span>
+        </div>
+        <div class="act-item">
+          <span class="act-pill pill-orange">Captador</span>
+          <span class="act-label">moveu de</span>
+          <span class="act-pill pill-blue">Prospecção</span>
+          →
+          <span class="act-pill pill-green">Em andamento</span>
+        </div>
+        <div class="act-item">
+          <span class="act-pill pill-purple">Criador</span>
+          <span class="act-label">entregou</span>
+          <span class="act-text" style="color:rgba(255,255,255,.6)">3 posts_instagram.md</span>
+        </div>
+        <div class="act-item">
+          <span class="act-pill pill-orange">Analista</span>
+          <span class="act-label">atualizou</span>
+          <span class="act-text" style="color:rgba(255,255,255,.6)">dossie_cliente.md</span>
+        </div>
+        <div class="act-item">
+          <span class="act-pill pill-blue">Estrategista</span>
+          <span class="act-label">criou tarefa</span>
+          <span class="act-text" style="color:rgba(255,255,255,.6)">Calendário de conteúdo Q3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature 3 -->
+  <div class="feature-block">
+    <div class="feature-text">
+      <span class="feature-tag">Escala</span>
+      <h2 class="feature-h2">Escale sem gerenciar. O Maestro faz isso por você.</h2>
+      <p class="feature-p">O Maestro distribui, coordena e acompanha todas as skills ao mesmo tempo. Você seleciona as tarefas, aponta o agente certo e o time executa. Sem microgerenciamento, sem gargalo.</p>
+    </div>
+    <div class="feature-ui">
+      <div class="task-board">
+        <div class="task-row">
+          <span class="task-id">ELV-001</span>
+          <div class="task-dot td-g"></div>
+          <span class="task-name">Pesquisar concorrentes do setor</span>
+          <span class="task-assignee">Analista</span>
+        </div>
+        <div class="task-row">
+          <span class="task-id">ELV-002</span>
+          <div class="task-dot td-o"></div>
+          <span class="task-name">Prospectar 10 leads qualificados</span>
+          <span class="task-assignee">Captador</span>
+        </div>
+        <div class="task-row">
+          <span class="task-id">ELV-003</span>
+          <div class="task-dot td-b"></div>
+          <span class="task-name">Criar calendário de conteúdo</span>
+          <span class="task-assignee">Estrategista</span>
+        </div>
+        <div class="task-row">
+          <span class="task-id">ELV-004</span>
+          <div class="task-dot td-p"></div>
+          <span class="task-name">Redigir 5 posts para Instagram</span>
+          <span class="task-assignee">Criador</span>
+        </div>
+        <div class="task-row">
+          <span class="task-id">ELV-005</span>
+          <div class="task-dot td-g"></div>
+          <span class="task-name">Disparar campanha de e-mail</span>
+          <span class="task-assignee">E-mail Mkt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== SKILLS SECTION ===================== -->
+<section class="skills-section">
+  <p class="skills-section-label">Skills disponíveis</p>
+  <h2 class="skills-section-title">Skills para cada demanda, prontas para usar.</h2>
+  <p class="skills-section-sub">De prospecção a entrega, cada etapa do marketing da sua agência tem uma skill pronta pra assumir.</p>
+
+  <!-- MARQUEE CAROUSEL -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <!-- set 1 -->
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Captador</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Entrevistador</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(88,130,255,.8)"></span>Analista</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(160,80,255,.8)"></span>Estrategista</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Vendedor</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(255,80,160,.8)"></span>Criador</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Designer</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(88,130,255,.8)"></span>E-mail Marketing</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(160,80,255,.8)"></span>Atendimento</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Contador</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Maestro</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(88,130,255,.8)"></span>Gestor de Projetos</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(160,80,255,.8)"></span>Gestor de Tráfego</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(255,80,160,.8)"></span>Gerente de Contas</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Revisor</div>
+      <div class="marquee-item"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Desenvolvedor</div>
+      <!-- set 2 (duplicate for seamless loop) -->
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Captador</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Entrevistador</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(88,130,255,.8)"></span>Analista</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(160,80,255,.8)"></span>Estrategista</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Vendedor</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(255,80,160,.8)"></span>Criador</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Designer</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(88,130,255,.8)"></span>E-mail Marketing</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(160,80,255,.8)"></span>Atendimento</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Contador</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Maestro</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(88,130,255,.8)"></span>Gestor de Projetos</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(160,80,255,.8)"></span>Gestor de Tráfego</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(255,80,160,.8)"></span>Gerente de Contas</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(255,93,40,.8)"></span>Revisor</div>
+      <div class="marquee-item" aria-hidden="true"><span class="mq-dot" style="background:rgba(52,211,153,.8)"></span>Desenvolvedor</div>
+    </div>
+  </div>
+
+  <!-- GRID (hidden by default) -->
+  <div class="skills-grid" id="skills-grid" style="display:none; margin-top:40px;">
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(255,93,40,.15)">🎯</div>
+      <div class="skill-card-name">Captador<span class="skill-card-tag">Ativo</span></div>
+      <p class="skill-card-desc">Identifica leads qualificados e inicia o primeiro contato para abrir novas oportunidades de negócio.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(52,211,153,.15)">🎙️</div>
+      <div class="skill-card-name">Entrevistador<span class="skill-card-tag">Ativo</span></div>
+      <p class="skill-card-desc">Conduz o diagnóstico com o cliente e extrai tudo que o time precisa para produzir com direção: identidade, dores, diferenciais e canais.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(88,130,255,.15)">📊</div>
+      <div class="skill-card-name">Analista<span class="skill-card-tag">Ativo</span></div>
+      <p class="skill-card-desc">Mapeia mercado, concorrência e posicionamento. Gera insights que fundamentam todas as decisões do time.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(160,80,255,.15)">🧭</div>
+      <div class="skill-card-name">Estrategista<span class="skill-card-tag">Ativo</span></div>
+      <p class="skill-card-desc">Define o plano de marketing do cliente: posicionamento, canais, cronograma e metas de resultado.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(255,93,40,.15)">💼</div>
+      <div class="skill-card-name">Vendedor<span class="skill-card-tag">Ativo</span></div>
+      <p class="skill-card-desc">Elabora propostas comerciais personalizadas e conduz o cliente até o fechamento do contrato.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(255,80,160,.15)">✍️</div>
+      <div class="skill-card-name">Criador<span class="skill-card-tag">Ativo</span></div>
+      <p class="skill-card-desc">Produz conteúdos, posts, roteiros e campanhas alinhados com a estratégia e a voz da marca.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(52,211,153,.15)">🎨</div>
+      <div class="skill-card-name">Designer<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Cria peças visuais, layouts e materiais gráficos seguindo a identidade visual do cliente.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(88,130,255,.15)">📧</div>
+      <div class="skill-card-name">E-mail Marketing<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Planeja, segmenta e dispara campanhas de e-mail com foco em abertura, clique e conversão.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(160,80,255,.15)">🎧</div>
+      <div class="skill-card-name">Atendimento<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Responde clientes, resolve dúvidas e mantém o relacionamento ativo com cada conta atendida.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(255,93,40,.15)">🧾</div>
+      <div class="skill-card-name">Contador<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Organiza receitas, despesas e relatórios financeiros para manter o negócio saudável e previsível.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(52,211,153,.15)">🎼</div>
+      <div class="skill-card-name">Maestro<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Orquestra todas as skills simultaneamente, coordenando entregas e mantendo o fluxo do time.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(88,130,255,.15)">📋</div>
+      <div class="skill-card-name">Gestor de Projetos<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Estrutura e acompanha projetos do início ao fim, garantindo prazos e qualidade nas entregas.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(160,80,255,.15)">📡</div>
+      <div class="skill-card-name">Gestor de Tráfego<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Gerencia e otimiza anúncios pagos para gerar leads e conversões com o menor custo possível.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(255,80,160,.15)">🤝</div>
+      <div class="skill-card-name">Gerente de Contas<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Cuida do relacionamento com os clientes existentes, garantindo retenção e expansão de contratos.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(255,93,40,.15)">🔍</div>
+      <div class="skill-card-name">Revisor<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Revisa todo entregável antes de chegar ao cliente: consistência de voz, gramática e alinhamento com a estratégia, sem deixar nada passar.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:rgba(52,211,153,.15)">💻</div>
+      <div class="skill-card-name">Desenvolvedor<span class="skill-card-tag coming">Em breve</span></div>
+      <p class="skill-card-desc">Implementa automações, integrações e ferramentas técnicas que potencializam o trabalho do time.</p>
+      <span class="skill-card-arrow">→</span>
+    </div>
+
+  </div>
+
+  <!-- BUTTON (below grid always) -->
+  <button class="skills-explore-btn" id="toggle-skills-btn" onclick="toggleSkills()" style="margin-top:40px;">Ver todas as skills</button>
+
+</section>
+
+<!-- ===================== CREATE OWN ===================== -->
+<section class="create-section">
+
+  <!-- floating dots decoration -->
+  <div class="create-dots" aria-hidden="true">
+    <span style="top:12%;left:8%;width:5px;height:5px"></span>
+    <span style="top:18%;left:14%"></span>
+    <span style="top:8%;left:22%"></span>
+    <span style="top:25%;left:6%"></span>
+    <span style="top:35%;left:18%;width:3px;height:3px"></span>
+    <span style="top:5%;left:30%;width:3px;height:3px"></span>
+    <span style="top:15%;right:8%;width:5px;height:5px"></span>
+    <span style="top:22%;right:14%"></span>
+    <span style="top:9%;right:22%"></span>
+    <span style="top:28%;right:6%"></span>
+    <span style="top:38%;right:18%;width:3px;height:3px"></span>
+    <span style="top:6%;right:30%;width:3px;height:3px"></span>
+    <span style="top:48%;left:5%;width:3px;height:3px"></span>
+    <span style="top:55%;left:12%"></span>
+    <span style="top:62%;left:8%;width:5px;height:5px"></span>
+    <span style="top:48%;right:5%;width:3px;height:3px"></span>
+    <span style="top:55%;right:12%"></span>
+    <span style="top:62%;right:8%;width:5px;height:5px"></span>
+  </div>
+
+  <div class="create-content">
+    <h2 class="create-h2">Crie suas próprias skills.</h2>
+    <p class="create-sub">Construa skills personalizadas com a API do ElevoIA. Mantenha privadas para o seu negócio ou compartilhe com a comunidade.</p>
+    <a href="#" class="btn-cta-filled">Começar a construir</a>
+  </div>
+
+  <!-- animated skill-creation demo -->
+  <div class="skill-demo">
+
+    <div class="demo-header">
+      <span class="demo-dot demo-dot-r"></span>
+      <span class="demo-dot demo-dot-y"></span>
+      <span class="demo-dot demo-dot-g"></span>
+      <span class="demo-title">ElevoIA · Nova Skill</span>
+    </div>
+
+    <div class="demo-body">
+
+      <!-- user message -->
+      <div class="demo-msg demo-msg-user" id="demo-user">
+        <span class="demo-msg-from">Você</span>
+        <div class="demo-bubble demo-bubble-user">
+          Crie uma skill de <strong>Gestor de Redes Sociais</strong> para o meu time
+        </div>
+      </div>
+
+      <!-- agent response -->
+      <div class="demo-msg demo-msg-agent" id="demo-agent">
+        <span class="demo-msg-from">🎼 Maestro</span>
+        <div class="demo-bubble demo-bubble-agent">
+
+          <!-- thinking dots -->
+          <div class="demo-thinking" id="demo-thinking">
+            <span class="demo-think-dot"></span>
+            <span class="demo-think-dot"></span>
+            <span class="demo-think-dot"></span>
+          </div>
+
+          <!-- generation steps -->
+          <div class="demo-steps" id="demo-steps" style="display:none;">
+            <div class="demo-step" id="dstep-1">
+              <span class="step-spinner"></span>Analisando requisitos da skill
+            </div>
+            <div class="demo-step" id="dstep-2">
+              <span class="step-spinner"></span>Definindo responsabilidades e fluxo
+            </div>
+            <div class="demo-step" id="dstep-3">
+              <span class="step-spinner"></span>Integrando com o dossiê do cliente
+            </div>
+            <div class="demo-step-success" id="dstep-done">
+              ✓ Skill criada com sucesso!
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- resulting skill card -->
+      <div class="demo-new-skill" id="demo-skill">
+        <div class="demo-skill-icon">📱</div>
+        <div>
+          <div class="demo-skill-name">
+            Gestor de Redes Sociais
+            <span class="demo-skill-badge">NOVO</span>
+          </div>
+          <div class="demo-skill-desc">Gerencia publicações, monitora métricas e responde comentários em todas as plataformas.</div>
+        </div>
+      </div>
+
+    </div><!-- /demo-body -->
+
+    <div class="demo-input-bar">
+      <span class="demo-input-fake">Descreva a skill que você precisa...</span>
+      <button class="demo-input-btn">Criar skill</button>
+    </div>
+
+  </div><!-- /skill-demo -->
+
+</section>
+
+<!-- ===================== PRICING / CTA ===================== -->
+<section class="pricing-section">
+  <h2 class="pricing-title">Seu time de marketing começa hoje.</h2>
+  <p class="pricing-sub">16 skills especializadas, prontas para trabalhar pela sua agência. Um único investimento, acesso pra sempre.</p>
+
+  <div class="pricing-inner">
+
+    <!-- CARD DE PREÇO -->
+    <div class="price-card">
+      <p class="price-label">Acesso Imediato</p>
+      <h3 class="price-headline">16 skills especializadas, um único preço</h3>
+      <p class="price-desc">Sistema completo com 16 skills de marketing prontas para usar, mentoria, suporte e todas as atualizações futuras inclusas.</p>
+
+      <p class="price-tag-label">Pagamento Único</p>
+      <div class="price-amount">
+        <span class="price-currency">R$</span>
+        <span class="price-number">57</span>
+      </div>
+      <p class="price-method">à vista no PIX ou cartão</p>
+
+      <a href="#" class="btn-price">Garantir Acesso por R$ 57</a>
+
+      <p class="price-fine">
+        Acesso liberado imediatamente após o pagamento.<br><br>
+        <strong>Você paga 1 só vez e tem acesso pro resto da vida a todas as atualizações futuras.</strong>
+      </p>
+
+      <div class="bonus-7">
+        <div class="bonus-7-icon">🎁</div>
+        <div class="bonus-7-text">
+          <strong>Bônus desbloqueado em 7 dias</strong>
+          Após 1 semana de acesso, você recebe uma aula exclusiva com o <b>Captador</b>, a skill que vai te ajudar a colocar dinheiro no bolso encontrando e abordando clientes ideais do zero.
+        </div>
+      </div>
+    </div>
+
+    <!-- VSCODE CARD -->
+    <div class="vscode-card">
+
+      <div class="vs-bar">
+        <div class="vs-dots">
+          <div class="vs-dot vs-dot-r"></div>
+          <div class="vs-dot vs-dot-y"></div>
+          <div class="vs-dot vs-dot-g"></div>
+        </div>
+        <span class="vs-path">~/elevoia</span>
+        <span class="vs-branch"><b>●</b> 16 agentes · main</span>
+      </div>
+
+      <div class="vs-body">
+
+        <div class="vs-sidebar">
+          <div class="vs-icon active">&#9776;</div>
+          <div class="vs-icon">&#128269;</div>
+          <div class="vs-icon" style="position:relative">
+            &#9900;
+            <span class="vs-badge-icon">16</span>
+          </div>
+          <div class="vs-icon">&#9654;</div>
+        </div>
+
+        <div class="vs-explorer">
+          <div class="vs-exp-header">
+            <span>EXPLORER &nbsp;~/elevoia</span>
+            <div class="vs-exp-acts"><span>+</span><span>↺</span><span>⋯</span></div>
+          </div>
+
+          <div class="vs-tree">
+            <div class="vs-row active">
+              <span class="vs-arr">▼</span>
+              <span class="i-folder">📁</span>
+              <span>_contexto/</span>
+              <span class="vs-cmt">identidade e proposta</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>empresa.md</span>
+              <span class="vs-cmt">quem você é e seu ICP</span>
+              <span class="vs-m">M</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>tom-de-voz.md</span>
+              <span class="vs-cmt">linguagem e posicionamento</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>estrategia.md</span>
+              <span class="vs-cmt">metas e prioridades</span>
+            </div>
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>clientes/</span>
+              <span class="vs-cmt">um dossiê por cliente</span>
+            </div>
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>marketing/</span>
+              <span class="vs-cmt">posts, copies e criativos</span>
+            </div>
+            <div class="vs-row active">
+              <span class="vs-arr">▼</span>
+              <span class="i-folder">📁</span>
+              <span>vendas/</span>
+              <span class="vs-cmt">prospecção e propostas</span>
+            </div>
+            <div class="vs-row vs-ind vs-locked" style="font-size:14px;color:#fff;">
+              <span class="i-file">📄</span>
+              <span style="font-weight:600;">captador.md</span>
+              <span class="vs-cmt" style="font-size:12px;color:rgba(255,255,255,.5);">encontra e aborda clientes ideais</span>
+              <span class="vs-locked-badge">🔒 BLOQUEADO</span>
+            </div>
+            <div class="vs-skill-desc">Identifica leads qualificados, pesquisa o perfil ideal e inicia o primeiro contato para abrir oportunidades.</div>
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>atendimento/</span>
+              <span class="vs-cmt">suporte e fidelização</span>
+            </div>
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>operacoes/</span>
+              <span class="vs-cmt">gestão, métricas e finanças</span>
+            </div>
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-claude">✳</span>
+              <span>.claude/</span>
+              <span class="vs-cmt">16 agentes + skills ElevoIA</span>
+            </div>
+          </div>
+
+          <div class="vs-terminal">
+            <div class="vs-term-row">
+              <span class="vs-term-pmt">›</span>
+              <span style="color:var(--orange);font-weight:700">elevoia</span>
+              <span><b style="color:#fff;">load _contexto/</b></span>
+              <span class="vs-cursor"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="vs-status">
+        <div class="vs-st-l">
+          <span>⎇ main</span>
+          <span><span class="hi">●</span> 16 agentes</span>
+          <span>● 0 erros</span>
+        </div>
+        <div class="vs-st-r">
+          <span>UTF-8</span>
+          <span>Markdown</span>
+          <span>ElevoIA v1.0</span>
+        </div>
+      </div>
+
+    </div><!-- /vscode-card -->
+
+  </div><!-- /pricing-inner -->
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="faq-section">
+  <p class="faq-label">Dúvidas frequentes</p>
+  <h2 class="faq-title">Tem alguma dúvida?</h2>
+
+  <div class="faq-list">
+
+    <details class="faq-item">
+      <summary>
+        O que é o ElevoIA exatamente?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Um sistema com 16 skills de IA especializadas em marketing, cada uma com um papel definido: Captador, Estrategista, Criador, Analista e mais. Você usa pelo Claude, a IA da Anthropic, direto no seu computador. Não é um SaaS com mensalidade: é um sistema que você instala uma vez e usa para sempre, com seus próprios clientes.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Preciso saber programar para usar?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Não. O ElevoIA funciona em linguagem natural: você conversa com as skills exatamente como conversaria com um colega de equipe. Sem código, sem configuração complicada. Se você sabe mandar uma mensagem, você consegue usar.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Como funciona o pagamento e quando recebo o acesso?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Pagamento único de R$57 via PIX ou cartão de crédito. Assim que o pagamento é confirmado, o acesso é liberado imediatamente, sem aprovação manual, sem esperar. E é pra sempre: todas as atualizações futuras estão incluídas no único pagamento.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Funciona para qualquer tipo de agência?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Sim. O sistema foi pensado para agências de marketing digital, mas funciona para qualquer agência que queira usar IA para entregar mais resultado para seus clientes: social media, tráfego pago, branding, criação de conteúdo ou marketing completo.</p>
+    </details>
+
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="footer-inner" style="grid-template-columns:1fr auto;align-items:center;">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="text-decoration:none">
+        <div class="logo-icon">✳</div>
+        <span class="logo-text">elevo<em>IA</em></span>
+      </a>
+      <p class="footer-brand-desc">Um time de skills de IA que presta serviço de marketing para o seu negócio.</p>
+    </div>
+
+    <ul class="footer-links" style="flex-direction:row;gap:32px;">
+      <li><a href="https://www.instagram.com/rochhax/" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="https://www.youtube.com/@rochhax" target="_blank" rel="noopener">YouTube</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 ElevoIA. Todos os direitos reservados.</span>
+    <span class="footer-copy">Privacidade · Termos</span>
+  </div>
+</footer>
+
+<script>
+/* ── SKILL DEMO LOOP ── */
+(function() {
+  function runDemo() {
+    var user    = document.getElementById('demo-user');
+    var agent   = document.getElementById('demo-agent');
+    var thinking= document.getElementById('demo-thinking');
+    var steps   = document.getElementById('demo-steps');
+    var s1      = document.getElementById('dstep-1');
+    var s2      = document.getElementById('dstep-2');
+    var s3      = document.getElementById('dstep-3');
+    var sDone   = document.getElementById('dstep-done');
+    var skill   = document.getElementById('demo-skill');
+    if (!user) return;
+
+    // reset
+    [user, agent, skill].forEach(function(el){ el.classList.remove('visible'); });
+    [s1, s2, s3].forEach(function(el){ el.classList.remove('visible','done'); });
+    sDone.classList.remove('visible');
+    thinking.style.display = 'flex';
+    steps.style.display = 'none';
+
+    // phase 1 — user message
+    setTimeout(function(){ user.classList.add('visible'); }, 700);
+
+    // phase 2 — agent appears with thinking dots
+    setTimeout(function(){ agent.classList.add('visible'); }, 1700);
+
+    // phase 3 — switch to steps
+    setTimeout(function(){
+      thinking.style.display = 'none';
+      steps.style.display = 'flex';
+      s1.classList.add('visible');
+    }, 3500);
+
+    setTimeout(function(){
+      s1.classList.add('done');
+      s2.classList.add('visible');
+    }, 4600);
+
+    setTimeout(function(){
+      s2.classList.add('done');
+      s3.classList.add('visible');
+    }, 5700);
+
+    setTimeout(function(){
+      s3.classList.add('done');
+      sDone.classList.add('visible');
+    }, 6800);
+
+    // phase 4 — new skill card
+    setTimeout(function(){ skill.classList.add('visible'); }, 7700);
+
+    // loop
+    setTimeout(runDemo, 11500);
+  }
+
+  setTimeout(runDemo, 600);
+})();
+
+function toggleSkills() {
+  var grid = document.getElementById('skills-grid');
+  var btn  = document.getElementById('toggle-skills-btn');
+  var open = grid.style.display === 'grid';
+  grid.style.display = open ? 'none' : 'grid';
+  btn.textContent    = open ? 'Ver todas as skills' : 'Ocultar skills';
+}
+
+function toggleTheme() {
+  var isLight = document.body.getAttribute('data-theme') === 'light';
+  document.body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  document.getElementById('theme-toggle').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('elevo-theme', isLight ? 'dark' : 'light');
+}
+
+(function() {
+  var saved = localStorage.getItem('elevo-theme');
+  if (saved === 'light') {
+    document.body.setAttribute('data-theme', 'light');
+    document.getElementById('theme-toggle').textContent = '🌙';
+  }
+})();
+</script>
+</body>
+</html>
