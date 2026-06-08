@@ -1354,6 +1354,84 @@ body[data-theme="light"]::before {
   line-height: 1.75;
   padding: 0 40px 24px 0;
 }
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+/* ── MOBILE ──────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* --- Nav --- */
+  nav { padding: 0 20px; }
+  .theme-label { display: none; }
+  .nav-signup { padding: 7px 14px; }
+
+  /* --- Hero --- */
+  .hero { padding: 120px 22px 32px; }
+  .hero-sub { font-size: 15px; }
+  .hero-mockup-wrap { padding: 0 20px; }
+
+  /* --- Features → single column --- */
+  .features { padding: 72px 22px 32px; }
+  .feature-block,
+  .feature-block.reverse {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-bottom: 72px;
+    direction: ltr;
+  }
+
+  /* --- Skills grid → 2 columns --- */
+  .skills-section { padding: 32px 22px 48px; }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* --- Create section --- */
+  .create-section { padding: 32px 22px 100px; }
+
+  /* --- Pricing → stack --- */
+  .pricing-section { padding: 64px 22px 90px; }
+  .pricing-sub { margin-bottom: 40px; }
+  .pricing-inner { flex-direction: column; }
+  .price-card { flex: none; width: 100%; }
+  .vscode-card { min-height: 420px; }
+
+  /* --- FAQ --- */
+  .faq-section { padding: 64px 22px 80px; }
+  .faq-title { margin-bottom: 40px; }
+  .faq-answer { padding: 0 0 20px 0; }
+
+  /* --- Footer → stack --- */
+  footer { padding: 48px 22px 40px; }
+  .footer-inner { grid-template-columns: 1fr !important; gap: 28px; }
+  .footer-links { gap: 24px !important; flex-wrap: wrap; }
+  .footer-bottom { flex-direction: column; gap: 10px; align-items: flex-start; text-align: left; }
+}
+
+/* ── SMALL MOBILE (< 430px) ──────────────────────── */
+@media (max-width: 430px) {
+  nav { padding: 0 16px; }
+  .logo-text { font-size: 16px; }
+
+  .hero { padding: 110px 18px 28px; }
+
+  .features { padding: 56px 18px 24px; }
+
+  .skills-section { padding: 28px 18px 40px; }
+  .skills-grid { grid-template-columns: 1fr; }
+
+  .create-section { padding: 28px 18px 80px; }
+
+  .pricing-section { padding: 56px 18px 72px; }
+  .pricing-title { letter-spacing: -1px; }
+  .price-number { font-size: 72px; }
+  .vscode-card { min-height: 360px; }
+  .vs-cmt { display: none; }
+
+  .faq-section { padding: 56px 18px 72px; }
+
+  footer { padding: 40px 18px 32px; }
+}
 </style>
 </head>
 <body>
@@ -1366,7 +1444,7 @@ body[data-theme="light"]::before {
   </a>
 
   <div style="display:flex;align-items:center;gap:10px;">
-    <span style="font-size:12px;font-weight:500;color:var(--c-muted);">Mudar tema</span>
+    <span class="theme-label" style="font-size:12px;font-weight:500;color:var(--c-muted);">Mudar tema</span>
     <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Mudar tema">☀️</button>
     <a href="#" class="nav-signup">Começar agora</a>
   </div>
