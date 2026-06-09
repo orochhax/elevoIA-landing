@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElevoIA — Revolucione seu Fluxo com IA</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;0,8..60,900&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================
+   TOKENS
+===================================================== */
+:root{
+  --c-bg:        #070c18;
+  --c-surface:   #0c1220;
+  --c-surface2:  #101828;
+  --c-border:    rgba(255,255,255,.08);
+  --c-border2:   rgba(255,255,255,.04);
+  --c-text:      #fff;
+  --c-muted:     rgba(255,255,255,.5);
+  --c-muted2:    rgba(255,255,255,.3);
+  --orange:      #ff5d28;
+  --orange-2:    #ff7a45;
+  --orange-glow: rgba(255,93,40,.55);
+  --orange-dim:  rgba(255,93,40,.12);
+  --font:        'Inter', sans-serif;
+  --font-serif:  'Source Serif 4','Georgia',serif;
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--c-bg);
+  color:var(--c-text);
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:30px 30px;pointer-events:none;z-index:0;
+}
+
+/* =====================================================
+   NAV
+===================================================== */
+nav{
+  position:fixed;inset:0 0 auto 0;z-index:999;height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;
+  border-bottom:1px solid var(--c-border);
+  background:rgba(7,12,24,.8);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{
+  width:30px;height:30px;background:var(--orange);border-radius:8px;
+  display:grid;place-items:center;font-size:16px;color:#fff;
+  box-shadow:0 0 14px var(--orange-glow);
+}
+.logo-text{font-size:18px;font-weight:900;letter-spacing:-.4px;color:var(--c-text)}
+.logo-text em{color:var(--orange);font-style:normal}
+
+.nav-menu{display:flex;gap:30px;list-style:none}
+.nav-menu a{
+  color:var(--c-muted);font-size:14px;font-weight:500;
+  text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:5px;
+}
+.nav-menu a:hover{color:var(--c-text)}
+.nav-menu .caret{font-size:9px;opacity:.6}
+
+.nav-cta{
+  background:var(--c-surface2);
+  border:1px solid var(--c-border);
+  color:var(--c-text);
+  font-size:13.5px;font-weight:600;
+  padding:9px 20px;border-radius:9px;text-decoration:none;
+  transition:border-color .2s,background .2s;
+}
+.nav-cta:hover{border-color:rgba(255,93,40,.5);background:rgba(255,93,40,.1)}
+
+/* =====================================================
+   HERO
+===================================================== */
+#hero{
+  position:relative;z-index:1;
+  padding:130px 24px 0;
+  text-align:center;
+  overflow:hidden;
+}
+.hero-inner{position:relative;z-index:3;max-width:760px;margin:0 auto}
+
+.badge-new{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--c-border);
+  border-radius:30px;padding:5px 6px 5px 6px;
+  font-size:12.5px;color:var(--c-muted);margin-bottom:26px;
+}
+.badge-new .tag{
+  background:var(--orange);color:#fff;font-weight:700;font-size:11px;
+  padding:2px 9px;border-radius:30px;
+}
+.badge-new .arr{opacity:.5}
+
+.hero-h1{
+  font-size:clamp(34px,5.4vw,58px);
+  font-weight:800;line-height:1.08;letter-spacing:-1.5px;
+  margin-bottom:20px;
+}
+.hero-h1 .o{color:var(--orange)}
+.hero-sub{
+  font-size:16px;line-height:1.7;color:var(--c-muted);
+  max-width:520px;margin:0 auto 32px;
+}
+.hero-btns{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--orange);color:#fff;
+  padding:14px 26px;border-radius:10px;
+  font-size:14px;font-weight:700;text-decoration:none;
+  box-shadow:0 0 28px rgba(255,93,40,.45);transition:box-shadow .2s;
+}
+.btn-primary:hover{box-shadow:0 0 46px rgba(255,93,40,.7)}
+.btn-dark{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--c-border);
+  color:var(--c-text);
+  padding:14px 26px;border-radius:10px;
+  font-size:14px;font-weight:600;text-decoration:none;
+  transition:border-color .2s,background .2s;
+}
+.btn-dark:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.07)}
+
+/* topographic background */
+.topo{
+  position:relative;z-index:1;
+  margin-top:-40px;
+  height:340px;
+  width:100vw;
+  left:50%;
+  transform:translateX(-50%);
+  overflow:hidden;
+  pointer-events:none;
+}
+.topo svg{position:absolute;left:0;top:0;width:100%;height:100%}
+.topo svg g{will-change:transform}
+.topo-g1{animation:topoWave1 7s ease-in-out infinite}
+.topo-g2{animation:topoWave2 9s ease-in-out infinite}
+.topo-g3{animation:topoWave3 5.5s ease-in-out infinite}
+@keyframes topoWave1{0%,100%{transform:translateY(-9px)}50%{transform:translateY(9px)}}
+@keyframes topoWave2{0%,100%{transform:translateY(7px)}50%{transform:translateY(-11px)}}
+@keyframes topoWave3{0%,100%{transform:translateY(-6px)}50%{transform:translateY(10px)}}
+.topo-glow{
+  position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);
+  width:760px;height:300px;
+  background:radial-gradient(ellipse at center,rgba(255,93,40,.28) 0%,rgba(255,93,40,.06) 40%,transparent 70%);
+  filter:blur(10px);
+}
+
+/* =====================================================
+   TRUST
+===================================================== */
+.trust{position:relative;z-index:2;padding:10px 24px 70px;text-align:center}
+.trust-label{font-size:13px;color:var(--c-muted);margin-bottom:28px}
+.trust-logos{
+  display:flex;align-items:center;justify-content:center;
+  gap:46px;flex-wrap:wrap;max-width:980px;margin:0 auto;opacity:.5;
+}
+.tlogo{
+  font-size:21px;font-weight:700;color:#fff;display:flex;align-items:center;gap:7px;
+  filter:grayscale(1);letter-spacing:-.3px;
+}
+.tlogo.lower{text-transform:lowercase}
+.tlogo.serif{font-family:var(--font-serif)}
+.tlogo.italic{font-style:italic;font-weight:800}
+
+/* =====================================================
+   SHARED SECTION
+===================================================== */
+.section{position:relative;z-index:1;padding:30px 40px 90px}
+.sec-head{text-align:center;max-width:640px;margin:0 auto 56px}
+.sec-title{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-1px;margin-bottom:14px}
+.sec-sub{font-size:15px;color:var(--c-muted);line-height:1.6}
+
+/* =====================================================
+   FEATURE CARDS (3)
+===================================================== */
+.features{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+  max-width:1140px;margin:0 auto;
+}
+.fcard{
+  background:linear-gradient(180deg,var(--c-surface) 0%,#090e1a 100%);
+  border:1px solid var(--c-border);
+  border-radius:18px;padding:26px 24px;
+  display:flex;flex-direction:column;
+  transition:border-color .25s,transform .25s;
+}
+.fcard:hover{border-color:rgba(255,93,40,.35);transform:translateY(-4px)}
+.fcard-title{font-size:19px;font-weight:800;letter-spacing:-.3px;margin-bottom:9px}
+.fcard-desc{font-size:13.5px;color:var(--c-muted);line-height:1.6;margin-bottom:22px;min-height:38px}
+.fcard-visual{
+  margin-top:auto;
+  background:#080d18;
+  border:1px solid var(--c-border2);
+  border-radius:12px;padding:16px;
+  height:220px;position:relative;overflow:hidden;
+}
+
+/* ── mock: bar chart ── */
+.mk-chart{display:flex;flex-direction:column;height:100%}
+.mk-chart .cap{
+  align-self:flex-start;
+  background:var(--c-surface2);border:1px solid var(--c-border);
+  border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700;margin-bottom:14px;
+}
+.chart-area2{display:flex;flex:1;gap:10px}
+.y-ax{display:flex;flex-direction:column;justify-content:space-between;font-size:9px;color:var(--c-muted2);padding-bottom:16px}
+.bars2{flex:1;display:flex;align-items:flex-end;justify-content:space-around;gap:10px;border-left:1px solid var(--c-border2);border-bottom:1px solid var(--c-border2);padding:0 6px 0 10px}
+.bar2{width:26px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--orange-2),var(--orange));box-shadow:0 0 14px rgba(255,93,40,.4)}
+.bar2.dim{background:rgba(255,93,40,.25);box-shadow:none}
+
+/* ── mock: calendar + tasks ── */
+.cal-head{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px}
+.cal-head span{font-size:9px;color:var(--c-muted2);text-align:center;padding:4px 0}
+.cal-head .day{font-size:11px;font-weight:700;color:var(--c-muted);border-radius:6px;padding:5px 0}
+.cal-head .day.on{background:var(--orange);color:#fff}
+.cal-head .day.sel{background:rgba(255,93,40,.2);color:var(--orange)}
+.task{display:flex;align-items:center;gap:9px;padding:7px 0;border-top:1px solid var(--c-border2)}
+.task-av{width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--orange),#b42805);flex-shrink:0}
+.task-tx{flex:1;min-width:0}
+.task-tx .n{font-size:11px;font-weight:700;white-space:nowrap}
+.task-tx .s{font-size:9px;color:var(--c-muted2)}
+.task-amt{font-size:11px;font-weight:700;color:var(--orange)}
+
+/* ── mock: testimonials ── */
+.testi-mk{padding:0}
+.tcard{
+  position:absolute;
+  background:var(--c-surface2);
+  border:1px solid var(--c-border);
+  border-radius:11px;padding:13px;width:80%;
+  box-shadow:0 16px 30px rgba(0,0,0,.4);
+}
+.tcard-1{top:14px;left:14px;z-index:1}
+.tcard-2{bottom:14px;right:14px;z-index:2}
+.stars{color:var(--orange);font-size:11px;letter-spacing:1px;margin-bottom:7px}
+.tquote{font-size:10.5px;color:var(--c-muted);line-height:1.5;margin-bottom:10px}
+.twho{display:flex;align-items:center;gap:8px}
+.tavatar{width:22px;height:22px;border-radius:50%;object-fit:cover}
+.tname{font-size:10.5px;font-weight:700}
+.trole{font-size:8.5px;color:var(--c-muted2)}
+
+/* =====================================================
+   HOW IT WORKS
+===================================================== */
+.how{
+  position:relative;z-index:1;
+  padding:70px 40px 100px;
+  border-top:1px solid var(--c-border);
+  background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 30%);
+}
+.how-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:22px;
+  max-width:1140px;margin:0 auto;
+}
+.hcard{
+  background:linear-gradient(180deg,var(--c-surface) 0%,#090e1a 100%);
+  border:1px solid var(--c-border);
+  border-radius:18px;padding:22px;
+  transition:border-color .25s;
+}
+.hcard:hover{border-color:rgba(255,93,40,.3)}
+.hcard-visual{
+  background:#080d18;border:1px solid var(--c-border2);
+  border-radius:13px;height:200px;position:relative;overflow:hidden;
+  display:grid;place-items:center;padding:18px;margin-bottom:18px;
+}
+.hcard-num{font-size:16px;font-weight:800;margin-bottom:6px}
+.hcard-num .o{color:var(--orange)}
+.hcard-desc{font-size:13px;color:var(--c-muted);line-height:1.55}
+
+/* mock: chat flow */
+.flow{width:100%;height:100%;position:relative}
+.fbubble{
+  position:absolute;
+  background:var(--c-surface2);border:1px solid var(--c-border);
+  border-radius:10px;padding:8px 11px;font-size:10px;color:var(--c-muted);
+  display:flex;align-items:center;gap:7px;max-width:74%;line-height:1.4;
+}
+.fbubble .ic{width:18px;height:18px;border-radius:5px;background:var(--orange-dim);display:grid;place-items:center;font-size:10px;flex-shrink:0}
+.fb-1{top:6px;left:0}
+.fb-2{top:54px;left:18px}
+.fb-3{bottom:8px;left:6px}
+.ai-node{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  display:flex;align-items:center;gap:8px;
+}
+.ai-chip{width:40px;height:40px;border-radius:11px;background:#0c1220;border:1px solid rgba(255,93,40,.4);display:grid;place-items:center;color:var(--orange);font-size:18px;box-shadow:0 0 18px rgba(255,93,40,.35)}
+.ai-lbl{background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:5px 10px;border-radius:8px}
+.flow-line{position:absolute;right:60px;top:50%;width:50px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,93,40,.6))}
+
+/* mock: notification */
+.notif{
+  width:100%;
+  background:var(--c-surface2);border:1px solid var(--c-border);
+  border-radius:12px;padding:13px;display:flex;gap:11px;align-items:flex-start;
+  box-shadow:0 16px 30px rgba(0,0,0,.4);
+}
+.notif-ic{width:30px;height:30px;border-radius:8px;background:var(--orange-dim);border:1px solid rgba(255,93,40,.3);display:grid;place-items:center;color:var(--orange);font-size:15px;flex-shrink:0}
+.notif-bd{flex:1}
+.notif-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.notif-hd .t{font-size:12px;font-weight:700}
+.notif-hd .badge{font-size:8px;font-weight:800;color:var(--orange);background:var(--orange-dim);padding:2px 7px;border-radius:20px}
+.notif-tx{font-size:10.5px;color:var(--c-muted);line-height:1.5}
+
+/* mock: AI assistants */
+.assist-pill{
+  background:var(--c-surface2);border:1px solid var(--c-border);
+  border-radius:30px;padding:7px 18px;font-size:12px;font-weight:700;
+  position:absolute;top:18px;left:50%;transform:translateX(-50%);
+}
+.robots{display:flex;gap:14px;margin-top:30px}
+.robot{
+  width:62px;height:62px;border-radius:16px;
+  display:grid;place-items:center;font-size:30px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 10px 24px rgba(0,0,0,.4);
+}
+.robot.r1{background:radial-gradient(circle at 35% 30%,#ff7a45,#7a1f06)}
+.robot.r2{background:radial-gradient(circle at 35% 30%,#46b3ff,#0a3a66)}
+.robot.r3{background:radial-gradient(circle at 35% 30%,#34d399,#0a5c43)}
+
+/* mock: pro pricing */
+.pro-card{
+  width:100%;max-width:230px;
+  background:var(--c-surface2);border:1px solid var(--c-border);
+  border-radius:14px;padding:18px;position:relative;
+}
+.pro-ic{width:34px;height:34px;border-radius:9px;background:var(--orange-dim);border:1px solid rgba(255,93,40,.3);display:grid;place-items:center;color:var(--orange);font-size:16px;margin-bottom:14px}
+.pro-name{font-size:14px;font-weight:800;margin-bottom:4px}
+.pro-price{font-size:26px;font-weight:900;margin-bottom:14px}
+.pro-price small{font-size:12px;font-weight:600;color:var(--c-muted2)}
+.pro-feat{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--c-muted);padding:5px 0}
+.pro-feat .ck{color:var(--orange);font-weight:800}
+.pro-fab{
+  position:absolute;right:-10px;top:18px;
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--orange-2),var(--orange));
+  display:grid;place-items:center;color:#fff;font-size:14px;
+  box-shadow:0 0 18px rgba(255,93,40,.5);
+}
+
+/* =====================================================
+   CTA
+===================================================== */
+.cta{position:relative;z-index:1;padding:30px 40px 100px}
+.cta-box{
+  max-width:1000px;margin:0 auto;text-align:center;
+  background:linear-gradient(135deg,rgba(255,93,40,.14),rgba(255,93,40,.03));
+  border:1px solid rgba(255,93,40,.25);
+  border-radius:20px;padding:60px 40px;
+}
+.cta-title{font-size:clamp(26px,3.4vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:12px}
+.cta-sub{font-size:15px;color:var(--c-muted);margin-bottom:28px}
+
+/* =====================================================
+   FAQ (copiado do index.html)
+===================================================== */
+.faq-section{
+  position:relative;z-index:1;
+  padding:80px 64px 100px;
+  border-top:1px solid var(--c-border);
+}
+.faq-label{
+  font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--c-muted);text-align:center;margin-bottom:20px;
+}
+.faq-title{
+  font-size:clamp(28px,3.5vw,44px);font-weight:800;
+  text-align:center;line-height:1.12;margin-bottom:64px;letter-spacing:-.5px;
+}
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--c-border)}
+.faq-item:first-child{border-top:1px solid var(--c-border)}
+.faq-item summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:22px 0;font-size:15px;font-weight:600;color:var(--c-text);
+  cursor:pointer;user-select:none;transition:color .2s;
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:hover{color:var(--orange)}
+.faq-icon{
+  width:26px;height:26px;border:1px solid var(--c-border);border-radius:50%;
+  display:grid;place-items:center;font-size:18px;font-weight:300;color:var(--c-muted);
+  flex-shrink:0;transition:background .2s,border-color .2s,color .2s;
+}
+.faq-icon::after{content:'+'}
+.faq-item[open] .faq-icon::after{content:'−'}
+.faq-item[open] .faq-icon{background:var(--orange);border-color:var(--orange);color:#fff}
+.faq-answer{font-size:14px;color:var(--c-muted);line-height:1.75;padding:0 40px 24px 0}
+
+/* =====================================================
+   FOOTER (copiado do index.html)
+===================================================== */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--c-border);
+  padding:48px 64px;
+}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;gap:40px}
+.footer-brand-desc{
+  font-size:13px;color:var(--c-muted);margin-top:12px;line-height:1.65;max-width:240px;
+}
+.footer-links{list-style:none;display:flex;gap:10px}
+.footer-links a{color:var(--c-muted);font-size:13px;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--c-text)}
+.footer-bottom{
+  max-width:1100px;margin:32px auto 0;padding-top:20px;
+  border-top:1px solid var(--c-border2);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-copy{font-size:12px;color:var(--c-muted2)}
+
+/* mock: track & improve (passo 4) */
+.track{width:100%;display:flex;flex-direction:column;gap:10px}
+.track-top{display:flex;align-items:center;justify-content:space-between}
+.track-lbl{font-size:11px;font-weight:700}
+.track-up{font-size:10px;font-weight:700;color:var(--orange);background:var(--orange-dim);padding:3px 9px;border-radius:20px}
+.track-chart{width:100%;height:72px;display:block}
+.track-rows{display:flex;flex-direction:column;gap:8px}
+.track-row{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--c-muted)}
+.track-row span:first-child{width:80px;flex-shrink:0}
+.tbar{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+.tbar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--orange-2),var(--orange))}
+
+/* =====================================================
+   PRICING (copiado do index.html)
+===================================================== */
+#pricing{
+  position:relative;z-index:1;
+  padding:60px 40px 110px;
+  border-top:1px solid var(--c-border);
+}
+.pricing-title{
+  font-size:clamp(30px,4vw,52px);
+  font-weight:900;letter-spacing:-1.2px;
+  text-align:center;margin-bottom:14px;
+}
+.pricing-sub{
+  font-size:16px;color:var(--c-muted);
+  text-align:center;margin-bottom:56px;max-width:620px;margin-left:auto;margin-right:auto;
+}
+.pricing-inner{
+  display:flex;gap:24px;max-width:1060px;margin:0 auto;align-items:stretch;
+}
+.price-card{
+  flex:0 0 370px;
+  background:#0a0e14;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;padding:36px 32px;
+  display:flex;flex-direction:column;
+}
+.price-label{
+  font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--orange);margin-bottom:18px;
+}
+.price-headline{
+  font-size:26px;font-weight:900;line-height:1.15;letter-spacing:-.5px;margin-bottom:12px;
+}
+.price-desc{
+  font-size:14px;color:var(--c-muted);line-height:1.65;margin-bottom:36px;flex:1;
+}
+.price-tag-label{
+  font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--c-muted);text-align:center;margin-bottom:10px;
+}
+.price-amount{display:flex;align-items:flex-start;justify-content:center;gap:3px;margin-bottom:6px}
+.price-currency{font-size:22px;font-weight:700;color:var(--c-text);padding-top:16px}
+.price-number{font-size:88px;font-weight:900;line-height:1;letter-spacing:-4px;color:var(--c-text)}
+.price-method{font-size:12px;color:var(--c-muted);text-align:center;margin-bottom:32px}
+.btn-price{
+  display:block;background:#fff;color:#000;padding:18px;border-radius:10px;
+  font-size:12.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+  text-decoration:none;text-align:center;font-family:var(--font);
+  transition:background .2s,color .2s,box-shadow .2s;margin-bottom:20px;
+}
+.btn-price:hover{background:var(--orange);color:#fff;box-shadow:0 0 36px rgba(255,93,40,.55)}
+.price-fine{font-size:11.5px;color:var(--c-muted);text-align:center;line-height:1.65}
+.price-fine strong{color:var(--c-text);font-weight:700}
+.bonus-7{
+  margin-top:18px;background:rgba(255,93,40,.08);
+  border:1px solid rgba(255,93,40,.25);border-radius:10px;padding:13px 16px;
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+}
+.bonus-7-icon{font-size:20px;line-height:1;flex-shrink:0;margin-top:1px}
+.bonus-7-text{font-size:11px;color:var(--c-muted);line-height:1.6}
+.bonus-7-text strong{color:var(--orange);font-size:12px;display:block;margin-bottom:3px}
+
+/* ── VSCODE CARD ── */
+.vscode-card{
+  flex:1;background:#0d1117;
+  border:1px solid rgba(255,255,255,.09);border-radius:20px;
+  overflow:hidden;display:flex;flex-direction:column;
+  font-family:'Courier New',Courier,monospace;
+}
+.vs-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;background:#161b22;
+  border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;
+}
+.vs-dots{display:flex;gap:6px;align-items:center}
+.vs-dot{width:11px;height:11px;border-radius:50%}
+.vs-dot-r{background:#ff5f57}.vs-dot-y{background:#ffbd2e}.vs-dot-g{background:#28c840}
+.vs-path{font-size:12px;color:rgba(255,255,255,.45)}
+.vs-branch{font-size:11px;color:rgba(255,255,255,.28)}
+.vs-branch b{color:var(--orange)}
+.vs-body{display:flex;flex:1;min-height:0}
+.vs-sidebar{
+  width:42px;background:#161b22;
+  border-right:1px solid rgba(255,255,255,.04);
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 0;gap:22px;flex-shrink:0;
+}
+.vs-icon{width:20px;height:20px;display:grid;place-items:center;color:rgba(255,255,255,.28);font-size:14px;position:relative}
+.vs-icon.active{color:rgba(255,255,255,.75)}
+.vs-badge-icon{
+  position:absolute;top:-4px;right:-5px;width:13px;height:13px;border-radius:50%;
+  background:var(--orange);font-size:7.5px;color:#fff;font-weight:700;
+  display:grid;place-items:center;font-family:var(--font);
+}
+.vs-explorer{flex:1;display:flex;flex-direction:column;min-width:0}
+.vs-exp-header{
+  padding:7px 14px;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.vs-exp-acts{display:flex;gap:12px;color:rgba(255,255,255,.25);font-size:12px}
+.vs-tree{flex:1;padding:6px 0;overflow:auto}
+.vs-row{
+  display:flex;align-items:center;padding:5px 14px;gap:7px;
+  font-size:14px;color:rgba(255,255,255,.6);white-space:nowrap;cursor:default;
+}
+.vs-row:hover{background:rgba(255,255,255,.04)}
+.vs-row.active{background:rgba(255,255,255,.06);color:#fff}
+.vs-ind{padding-left:26px}
+.vs-arr{font-size:8px;color:rgba(255,255,255,.25);width:10px;flex-shrink:0}
+.i-folder{color:#e8a039;font-size:12px}
+.i-file{color:#6cb6ff;font-size:11px}
+.i-claude{color:var(--orange);font-size:13px;font-weight:700}
+.vs-cmt{color:rgba(255,255,255,.25);font-size:12.5px;margin-left:2px;flex-shrink:0}
+.vs-m{margin-left:auto;background:#1a3a2a;color:#3fb077;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:3px;flex-shrink:0}
+.vs-locked{background:rgba(255,93,40,.07);border-left:2px solid var(--orange);position:relative}
+.vs-locked-badge{
+  margin-left:auto;display:flex;align-items:center;gap:3px;
+  background:rgba(255,93,40,.18);border:1px solid rgba(255,93,40,.5);color:var(--orange);
+  font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;flex-shrink:0;letter-spacing:.4px;
+}
+.vs-skill-desc{
+  font-size:12px;color:rgba(255,255,255,.55);padding:4px 14px 7px 42px;
+  font-style:italic;line-height:1.55;background:rgba(255,93,40,.04);border-left:2px solid var(--orange);
+}
+.vs-terminal{background:#090d12;border-top:1px solid rgba(255,255,255,.05);padding:9px 14px;flex-shrink:0}
+.vs-term-row{display:flex;align-items:center;gap:6px;font-size:14px;color:rgba(255,255,255,.55)}
+.vs-term-pmt{color:var(--orange)}
+.vs-term-cmd b{color:#fff}
+.vs-cursor{
+  display:inline-block;width:7px;height:13px;background:rgba(255,255,255,.75);
+  margin-left:1px;vertical-align:middle;animation:blink .9s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.vs-status{
+  display:flex;align-items:center;justify-content:space-between;padding:3px 14px;
+  background:#161b22;border-top:1px solid rgba(255,255,255,.04);flex-shrink:0;
+}
+.vs-st-l,.vs-st-r{display:flex;align-items:center;gap:14px;font-size:10.5px;color:rgba(255,255,255,.3)}
+.vs-st-l .hi{color:var(--orange)}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media(max-width:980px){
+  .features{grid-template-columns:1fr;max-width:440px}
+  .section,.how,#pricing{padding-left:24px;padding-right:24px}
+}
+@media(max-width:860px){
+  nav{padding:0 18px;height:58px}
+  .nav-menu{display:none}
+  #hero{padding-top:104px}
+  .how-grid{grid-template-columns:1fr;max-width:460px}
+  .topo{height:240px}
+  .trust-logos{gap:30px}
+  .pricing-inner{flex-direction:column}
+  .price-card{flex:none;width:100%}
+  .vscode-card{min-height:420px}
+  .faq-section{padding:56px 20px 72px}
+  .faq-title{margin-bottom:36px}
+  .faq-answer{padding:0 0 20px 0}
+  footer{padding:36px 20px}
+  .footer-inner{grid-template-columns:1fr !important;gap:24px}
+  .footer-links{gap:24px !important;flex-wrap:wrap}
+  .footer-bottom{flex-direction:column;gap:10px;align-items:flex-start;text-align:left}
+}
+@media(max-width:430px){
+  nav{padding:0 14px}
+  #hero{padding:96px 16px 0}
+  .hero-btns{flex-direction:column}
+  .btn-primary,.btn-dark{width:100%;justify-content:center}
+  .section{padding:24px 16px 64px}
+  .how{padding:56px 16px 72px}
+  #pricing{padding:48px 16px 80px}
+  .price-card{padding:30px 22px}
+  .price-number{font-size:72px}
+  .vscode-card{min-height:360px}
+  .vs-cmt{display:none}
+  .faq-section{padding:44px 16px 60px}
+  footer{padding:28px 16px}
+  .trust-logos{gap:22px}
+  .tlogo{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">✳</div>
+    <span class="logo-text">elevo<em>IA</em></span>
+  </a>
+  <a href="#pricing" class="nav-cta">Começar</a>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <div class="hero-inner">
+    <span class="badge-new"><span class="tag">Novo</span> Deixe a IA fazer o trabalho pesado <span class="arr">›</span></span>
+    <h1 class="hero-h1">O trabalho de uma semana,<br><span class="o">pronto em uma tarde.</span></h1>
+    <p class="hero-sub">Delegue as tarefas repetitivas para agentes de IA que trabalham 24/7 — e foque no que só você faz: pensar, criar e fechar negócio.</p>
+    <div class="hero-btns">
+      <a href="#pricing" class="btn-primary">Começar Agora ›</a>
+    </div>
+    <p style="font-size:12.5px;color:var(--c-muted2);margin-top:16px">Configure em 10 minutos</p>
+  </div>
+
+  <!-- topographic visual -->
+  <div class="topo">
+    <div class="topo-glow"></div>
+    <svg viewBox="0 0 1200 340" preserveAspectRatio="none" fill="none">
+      <g class="topo-g1" stroke="rgba(255,93,40,.18)" stroke-width="1.2">
+        <path d="M-20,300 C200,250 350,210 600,235 C850,260 1000,230 1220,275"/>
+        <path d="M-20,320 C220,275 360,235 600,255 C860,278 1010,250 1220,292"/>
+        <path d="M-20,260 C200,215 360,160 600,190 C840,220 1010,185 1220,235"/>
+        <path d="M-20,235 C220,190 380,130 600,162 C830,195 1020,160 1220,210"/>
+        <path d="M-20,205 C220,165 390,108 600,140 C820,172 1030,138 1220,185"/>
+      </g>
+      <g class="topo-g2" stroke="rgba(255,93,40,.42)" stroke-width="1.4">
+        <path d="M-20,178 C230,142 400,92 600,120 C810,150 1040,116 1220,162"/>
+        <path d="M-20,152 C240,120 410,74 600,100 C800,128 1050,96 1220,140"/>
+      </g>
+      <g class="topo-g3" stroke="rgba(255,160,110,.6)" stroke-width="1.6">
+        <path d="M-20,128 C250,100 420,58 600,82 C790,108 1060,78 1220,118"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════ TRUST ═══════════════ -->
+<section class="trust">
+  <p class="trust-label">Encaixa nas ferramentas que você já usa todo dia</p>
+  <div class="trust-logos">
+    <span class="tlogo lower">⊙ airbnb</span>
+    <span class="tlogo">▲ Vercel</span>
+    <span class="tlogo serif">Figma</span>
+    <span class="tlogo">❖ Webflow</span>
+    <span class="tlogo">▣ Square</span>
+    <span class="tlogo">Grab</span>
+    <span class="tlogo italic">Dribbble</span>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<section class="section">
+  <div class="features">
+
+    <!-- card 1 -->
+    <div class="fcard">
+      <div class="fcard-title">Decisões com Dados</div>
+      <p class="fcard-desc">Saiba o que está funcionando antes de gastar tempo e dinheiro no que não traz retorno.</p>
+      <div class="fcard-visual">
+        <div class="mk-chart">
+          <span class="cap">Receita</span>
+          <div class="chart-area2">
+            <div class="y-ax"><span>100</span><span>80</span><span>60</span><span>40</span><span>20</span></div>
+            <div class="bars2">
+              <div class="bar2 dim" style="height:38%"></div>
+              <div class="bar2" style="height:62%"></div>
+              <div class="bar2" style="height:48%"></div>
+              <div class="bar2" style="height:82%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- card 2 -->
+    <div class="fcard">
+      <div class="fcard-title">Recupere suas Horas</div>
+      <p class="fcard-desc">A IA cuida do operacional repetitivo enquanto você foca no cliente.</p>
+      <div class="fcard-visual">
+        <div class="cal-head">
+          <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+          <span class="day">10</span><span class="day">11</span><span class="day">12</span>
+          <span class="day on">13</span><span class="day sel">14</span><span class="day sel">15</span><span class="day">16</span>
+        </div>
+        <div class="task"><div class="task-av"></div><div class="task-tx"><div class="n">Relatório</div><div class="s">revisar até segunda</div></div><div class="task-amt">R$250</div></div>
+        <div class="task"><div class="task-av"></div><div class="task-tx"><div class="n">Campanha</div><div class="s">revisar até segunda</div></div><div class="task-amt">R$250</div></div>
+        <div class="task"><div class="task-av"></div><div class="task-tx"><div class="n">Relatório</div><div class="s">revisar até segunda</div></div><div class="task-amt">R$250</div></div>
+      </div>
+    </div>
+
+    <!-- card 3 -->
+    <div class="fcard">
+      <div class="fcard-title">Clientes que Ficam</div>
+      <p class="fcard-desc">Entregue mais rápido e com mais consistência — e veja a retenção dos seus clientes subir.</p>
+      <div class="fcard-visual testi-mk">
+        <div class="tcard tcard-1">
+          <div class="stars">★★★★☆</div>
+          <p class="tquote">"Em 30 dias entreguei o dobro de posts sem aumentar a equipe."</p>
+          <div class="twho">
+            <img class="tavatar" src="https://randomuser.me/api/portraits/women/65.jpg" alt="">
+            <div><div class="tname">Olivia Marston</div><div class="trole">CEO</div></div>
+          </div>
+        </div>
+        <div class="tcard tcard-2">
+          <div class="stars">★★★★★</div>
+          <p class="tquote">"O que tomava a minha tarde inteira agora sai em minutos."</p>
+          <div class="twho">
+            <img class="tavatar" src="https://randomuser.me/api/portraits/men/52.jpg" alt="">
+            <div><div class="tname">Dave Jones</div><div class="trole">UI/UX</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<section class="how">
+  <div class="sec-head">
+    <h2 class="sec-title">Como Funciona</h2>
+    <p class="sec-sub">Quatro passos para colocar a IA pra trabalhar pelo seu negócio.</p>
+  </div>
+
+  <div class="how-grid">
+
+    <!-- 1 -->
+    <div class="hcard">
+      <div class="hcard-visual">
+        <div class="flow">
+          <div class="fbubble fb-1"><span class="ic">✳</span> Obrigado! Você me poupou muito tempo.</div>
+          <div class="fbubble fb-2"><span class="ic">🧠</span> Use o fluxo de captura da equipe.</div>
+          <div class="fbubble fb-3"><span class="ic">⚡</span> Como priorizo as atualizações?</div>
+          <div class="flow-line"></div>
+          <div class="ai-node"><div class="ai-chip">✳</div><div class="ai-lbl">IA</div></div>
+        </div>
+      </div>
+      <div class="hcard-num"><span class="o">1.</span> Conecte em minutos</div>
+      <p class="hcard-desc">Sem código. A IA entende o seu contexto e já começa a trabalhar.</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="hcard">
+      <div class="hcard-visual">
+        <div class="notif">
+          <div class="notif-ic">🔔</div>
+          <div class="notif-bd">
+            <div class="notif-hd"><span class="t">Título da Notificação</span><span class="badge">NOVO</span></div>
+            <p class="notif-tx">Escolha as melhores oportunidades com confiança usando mais de 130 filtros ou crie telas baseadas em planos.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard-num"><span class="o">2.</span> Diga o que precisa</div>
+      <p class="hcard-desc">Em linguagem natural, como se falasse com um colega de equipe.</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="hcard">
+      <div class="hcard-visual">
+        <div class="assist-pill">Assistentes de IA</div>
+        <div class="robots">
+          <div class="robot r1">🤖</div>
+          <div class="robot r2">🤖</div>
+          <div class="robot r3">🤖</div>
+        </div>
+      </div>
+      <div class="hcard-num"><span class="o">3.</span> Deixe a IA executar</div>
+      <p class="hcard-desc">Cada agente é especialista numa parte do trabalho — e entrega pronto.</p>
+    </div>
+
+    <!-- 4 -->
+    <div class="hcard">
+      <div class="hcard-visual">
+        <div class="track">
+          <div class="track-top">
+            <span class="track-lbl">Resultados</span>
+            <span class="track-up">▲ +38% este mês</span>
+          </div>
+          <svg class="track-chart" viewBox="0 0 240 84" preserveAspectRatio="none">
+            <defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(255,93,40,.5)"/>
+              <stop offset="100%" stop-color="rgba(255,93,40,0)"/>
+            </linearGradient></defs>
+            <path d="M0,64 L40,56 L80,60 L120,40 L160,46 L200,26 L240,15 L240,84 L0,84 Z" fill="url(#tg)"/>
+            <path d="M0,64 L40,56 L80,60 L120,40 L160,46 L200,26 L240,15" fill="none" stroke="#ff5d28" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="track-rows">
+            <div class="track-row"><span>Conversão</span><span class="tbar"><i style="width:78%"></i></span></div>
+            <div class="track-row"><span>Engajamento</span><span class="tbar"><i style="width:64%"></i></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="hcard-num"><span class="o">4.</span> Acompanhe e evolua</div>
+      <p class="hcard-desc">Veja seus números subindo e deixe a IA sugerir o próximo passo.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<section id="pricing">
+  <h2 class="pricing-title">Seu time de marketing começa hoje.</h2>
+  <p class="pricing-sub">16 skills especializadas, prontas para trabalhar pela sua agência. Um único investimento, acesso pra sempre.</p>
+
+  <div class="pricing-inner">
+
+    <!-- ── CARD DE PREÇO ── -->
+    <div class="price-card">
+      <p class="price-label">Acesso Imediato</p>
+      <h3 class="price-headline">16 skills especializadas, um único preço</h3>
+      <p class="price-desc">Sistema completo com 16 skills de marketing prontas para usar, mentoria, suporte e todas as atualizações futuras inclusas.</p>
+
+      <p class="price-tag-label">Pagamento Único</p>
+      <div class="price-amount">
+        <span class="price-currency">R$</span>
+        <span class="price-number">57</span>
+      </div>
+      <p class="price-method">à vista no PIX ou cartão</p>
+
+      <a href="#" class="btn-price">Garantir Acesso por R$ 57</a>
+
+      <p class="price-fine">
+        Acesso liberado imediatamente após o pagamento.<br><br>
+        <strong>Você paga 1 só vez e tem acesso pro resto da vida a todas as atualizações futuras.</strong>
+      </p>
+
+      <div class="bonus-7">
+        <div class="bonus-7-icon">🎁</div>
+        <div class="bonus-7-text">
+          <strong>Bônus desbloqueado em 7 dias</strong>
+          Após 1 semana de acesso, você recebe uma aula exclusiva com o <b>Captador</b>, a skill que vai te ajudar a colocar dinheiro no bolso encontrando e abordando clientes ideais do zero.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── VSCODE CARD ── -->
+    <div class="vscode-card">
+
+      <!-- barra de título -->
+      <div class="vs-bar">
+        <div class="vs-dots">
+          <div class="vs-dot vs-dot-r"></div>
+          <div class="vs-dot vs-dot-y"></div>
+          <div class="vs-dot vs-dot-g"></div>
+        </div>
+        <span class="vs-path">~/elevoia</span>
+        <span class="vs-branch"><b>●</b> 16 agentes · main</span>
+      </div>
+
+      <!-- corpo: sidebar + explorer -->
+      <div class="vs-body">
+
+        <!-- sidebar de ícones -->
+        <div class="vs-sidebar">
+          <div class="vs-icon active">&#9776;</div>
+          <div class="vs-icon">&#128269;</div>
+          <div class="vs-icon" style="position:relative">
+            &#9900;
+            <span class="vs-badge-icon">16</span>
+          </div>
+          <div class="vs-icon">&#9654;</div>
+        </div>
+
+        <!-- explorador de arquivos -->
+        <div class="vs-explorer">
+          <div class="vs-exp-header">
+            <span>EXPLORER &nbsp;~/elevoia</span>
+            <div class="vs-exp-acts"><span>+</span><span>↺</span><span>⋯</span></div>
+          </div>
+
+          <div class="vs-tree">
+
+            <!-- _contexto/ -->
+            <div class="vs-row active">
+              <span class="vs-arr">▼</span>
+              <span class="i-folder">📁</span>
+              <span>_contexto/</span>
+              <span class="vs-cmt">identidade e proposta</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>empresa.md</span>
+              <span class="vs-cmt">quem você é e seu ICP</span>
+              <span class="vs-m">M</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>tom-de-voz.md</span>
+              <span class="vs-cmt">linguagem e posicionamento</span>
+            </div>
+            <div class="vs-row vs-ind">
+              <span class="i-file">📄</span>
+              <span>estrategia.md</span>
+              <span class="vs-cmt">metas e prioridades</span>
+            </div>
+
+            <!-- clientes/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>clientes/</span>
+              <span class="vs-cmt">um dossiê por cliente</span>
+            </div>
+
+            <!-- marketing/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>marketing/</span>
+              <span class="vs-cmt">posts, copies e criativos</span>
+            </div>
+
+            <!-- vendas/ -->
+            <div class="vs-row active">
+              <span class="vs-arr">▼</span>
+              <span class="i-folder">📁</span>
+              <span>vendas/</span>
+              <span class="vs-cmt">prospecção e propostas</span>
+            </div>
+            <div class="vs-row vs-ind vs-locked" style="font-size:14px;color:#fff;">
+              <span class="i-file">📄</span>
+              <span style="font-weight:600;">captador.md</span>
+              <span class="vs-cmt" style="font-size:12px;color:rgba(255,255,255,.5);">encontra e aborda clientes ideais</span>
+              <span class="vs-locked-badge">🔒 BLOQUEADO</span>
+            </div>
+            <div class="vs-skill-desc">Identifica leads qualificados, pesquisa o perfil ideal e inicia o primeiro contato para abrir oportunidades.</div>
+
+            <!-- atendimento/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>atendimento/</span>
+              <span class="vs-cmt">suporte e fidelização</span>
+            </div>
+
+            <!-- operacoes/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-folder">📁</span>
+              <span>operacoes/</span>
+              <span class="vs-cmt">gestão, métricas e finanças</span>
+            </div>
+
+            <!-- .claude/ -->
+            <div class="vs-row">
+              <span class="vs-arr">▶</span>
+              <span class="i-claude">✳</span>
+              <span>.claude/</span>
+              <span class="vs-cmt">16 agentes + skills ElevoIA</span>
+            </div>
+
+          </div><!-- /vs-tree -->
+
+          <!-- terminal -->
+          <div class="vs-terminal">
+            <div class="vs-term-row">
+              <span class="vs-term-pmt">›</span>
+              <span style="color:var(--orange);font-weight:700">elevoia</span>
+              <span class="vs-term-cmd"><b>load _contexto/</b></span>
+              <span class="vs-cursor"></span>
+            </div>
+          </div>
+
+        </div><!-- /vs-explorer -->
+      </div><!-- /vs-body -->
+
+      <!-- status bar -->
+      <div class="vs-status">
+        <div class="vs-st-l">
+          <span>⎇ main</span>
+          <span><span class="hi">●</span> 16 agentes</span>
+          <span>● 0 erros</span>
+        </div>
+        <div class="vs-st-r">
+          <span>UTF-8</span>
+          <span>Markdown</span>
+          <span>ElevoIA v1.0</span>
+        </div>
+      </div>
+
+    </div><!-- /vscode-card -->
+
+  </div><!-- /pricing-inner -->
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section class="faq-section">
+  <p class="faq-label">Dúvidas frequentes</p>
+  <h2 class="faq-title">Tem alguma dúvida?</h2>
+
+  <div class="faq-list">
+
+    <details class="faq-item">
+      <summary>
+        O que é o ElevoIA exatamente?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Um sistema com 16 skills de IA especializadas em marketing, cada uma com um papel definido: Captador, Estrategista, Criador, Analista e mais. Você usa pelo Claude, a IA da Anthropic, direto no seu computador. Não é um SaaS com mensalidade: é um sistema que você instala uma vez e usa para sempre, com seus próprios clientes.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Preciso saber programar para usar?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Não. O ElevoIA funciona em linguagem natural: você conversa com as skills exatamente como conversaria com um colega de equipe. Sem código, sem configuração complicada. Se você sabe mandar uma mensagem, você consegue usar.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Como funciona o pagamento e quando recebo o acesso?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Pagamento único de R$57 via PIX ou cartão de crédito. Assim que o pagamento é confirmado, o acesso é liberado imediatamente, sem aprovação manual, sem esperar. E é pra sempre: todas as atualizações futuras estão incluídas no único pagamento.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        Funciona para qualquer tipo de agência?
+        <span class="faq-icon"></span>
+      </summary>
+      <p class="faq-answer">Sim. O sistema foi pensado para agências de marketing digital, mas funciona para qualquer agência que queira usar IA para entregar mais resultado para seus clientes: social media, tráfego pago, branding, criação de conteúdo ou marketing completo.</p>
+    </details>
+
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-inner" style="grid-template-columns:1fr auto;align-items:center;">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="text-decoration:none">
+        <div class="logo-icon">✳</div>
+        <span class="logo-text">elevo<em>IA</em></span>
+      </a>
+      <p class="footer-brand-desc">Um time de skills de IA que presta serviço de marketing para o seu negócio.</p>
+    </div>
+
+    <ul class="footer-links" style="gap:32px;">
+      <li><a href="https://www.instagram.com/rochhax/" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="https://www.youtube.com/@rochhax" target="_blank" rel="noopener">YouTube</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 ElevoIA. Todos os direitos reservados.</span>
+    <span class="footer-copy">Privacidade · Termos</span>
+  </div>
+</footer>
+
+</body>
+</html>
